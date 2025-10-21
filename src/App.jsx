@@ -8,6 +8,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/customer/HomePage';
 import MenuPage from './pages/customer/MenuPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import CartPage from './pages/customer/CartPage';
+import ReservationsPage from './pages/customer/ReservationsPage';
 
 // 🧱 Components
 import Navbar from './components/common/Navbar';
@@ -25,6 +27,8 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/menu" element={<MenuPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/reservations" element={<ReservationsPage />} />
         </Routes>
       </div>
     </BrowserRouter>
