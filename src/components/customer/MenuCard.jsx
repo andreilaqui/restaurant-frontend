@@ -2,40 +2,39 @@ import React from 'react'
 
 function MenuCard({ item }) {
   return (
-    <div className="rounded-lg shadow bg-sunrice-cream overflow-hidden hover:shadow-lg transition">
-      <img
-        src={item.image}
-        alt={item.name}
-        className="w-full h-48 object-cover"
-      />
-      <div className="p-4">
-        <h3 className="text-sunrice-brown font-semibold text-lg">
-          {item.name}
-        </h3>
-        <p className="text-sunrice-brown/80 text-sm mt-1">
-          {item.description}
-        </p>
-
-        {/* Tags */}
+    <div className="
+            bg-sunrice-cream
+            rounded-xl p-4 
+            shadow-[8px_8px_16px_#e0d9cf,-8px_-8px_16px_#ffffff] 
+            hover:shadow-[inset_8px_8px_16px_#e0d9cf,inset_-8px_-8px_16px_#ffffff] 
+            transition 
+            dark:bg-white/10 dark:backdrop-blur-md dark:border dark:border-white/20 
+            dark:shadow-none
+          ">
+        <img
+          src={item.image}
+          alt={item.name}
+          className="w-full h-48 object-cover rounded-lg mb-3"
+        />
+        <h3 className="font-semibold text-lg text-sunrice-brown dark:text-sunrice-yellow">{item.name}</h3>
+        <p className="text-sm text-sunrice-brown/80 dark:text-sunrice-cream/90">{item.description}</p>
         <div className="mt-2 flex flex-wrap gap-2">
           {item.tags?.map((tag) => (
             <span
               key={tag}
-              className="text-xs bg-sunrice-green text-sunrice-brown px-2 py-1 rounded-full"
+              className="text-xs 
+             bg-sunrice-green text-sunrice-brown 
+             dark:bg-sunrice-green/50 dark:text-sunrice-cream 
+             px-2 py-1 rounded-full"
             >
               {tag}
             </span>
           ))}
         </div>
-
-        {/* Price */}
-        <p className="mt-3 font-bold text-sunrice-yellow">
-          ${item.price}
-        </p>
+        <p className="mt-3 font-bold text-sunrice-yellow dark:text-sunrice-yellow">${item.price}</p>
       </div>
-    </div>
+  );
 
-  )
 }
 
 export default MenuCard

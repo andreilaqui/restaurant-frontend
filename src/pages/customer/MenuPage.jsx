@@ -15,8 +15,8 @@ import MenuCard from "../../components/customer/MenuCard";
 
 function MenuPage() {
   return (
-    <div className="bg-sunrice-cream min-h-screen py-10 px-6">
-      <h1 className="text-3xl font-bold text-sunrice-brown mb-8 text-center">
+    <div className="bg-sunrice-cream dark:bg-neutral-900 min-h-screen py-10 px-6">
+      <h1 className="text-3xl font-bold text-sunrice-brown dark:text-sunrice-cream mb-8 text-center">
         Manila Sunrice Menu
       </h1>
 
