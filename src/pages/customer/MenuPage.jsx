@@ -6,7 +6,7 @@ import React from 'react';
 // import AboutPage from './AboutPage';
 
 //Data
-import menuItems from "../../data/menuData";
+import menuItems from "../../data/menuItems";
 
 // 🧱 Components
 import MenuCard from "../../components/customer/MenuCard";
