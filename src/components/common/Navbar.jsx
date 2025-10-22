@@ -7,6 +7,7 @@ function Navbar() {
       <h1 className="text-xl font-semibold">Restaurant App - Live Testing</h1>
       <Link to="/cart">Cart</Link>
       <Link to="/reservations">Reservations</Link>
+      <Link to="/menu">Menu</Link>
     </nav>
   )
 }
