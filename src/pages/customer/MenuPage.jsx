@@ -10,11 +10,12 @@ import menuItems from "../../data/menuData";
 
 // 🧱 Components
 import MenuCard from "../../components/customer/MenuCard";
-
+import PageWrapper from '../../components/common/PageWrapper';
 
 
 function MenuPage() {
   return (
+    <PageWrapper title="Menu">
     <div className="bg-sunrice-cream dark:bg-neutral-900 min-h-screen py-10 px-6">
       <h1 className="text-3xl font-bold text-sunrice-brown dark:text-sunrice-cream mb-8 text-center">
         Manila Sunrice Menu
@@ -26,6 +27,7 @@ function MenuPage() {
         ))}
       </div>
     </div>
+    </PageWrapper>
   )
 }
 

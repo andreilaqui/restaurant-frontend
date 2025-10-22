@@ -1,11 +1,11 @@
-import React from 'react'
+// 🧱 Components
+import PageWrapper from '../../components/common/PageWrapper';
 
 function CartPage() {
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Cart</h1>
-      <p>Your selected items will appear here.</p>
-    </div>
+    <PageWrapper title="Cart">
+      <p>This is the Cart page placeholder.</p>
+    </PageWrapper>
   )
 }
 

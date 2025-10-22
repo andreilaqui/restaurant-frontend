@@ -1,8 +1,11 @@
-import React from 'react'
+// 🧱 Components
+import PageWrapper from '../../components/common/PageWrapper';
 
 function HomePage() {
   return (
-    <h1 className="text-2xl font-bold">Customer Home Page</h1>
+    <PageWrapper title="Home">
+      <p>This is the Home page placeholder.</p>
+    </PageWrapper>
   )
 }
 
