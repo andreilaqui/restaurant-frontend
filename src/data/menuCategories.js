@@ -1,4 +1,5 @@
 export const MENU_CATEGORIES = [
+  { id: "all", label: "All" },
   { id: "rice", label: "All-Day Silog Plates" },
   { id: "sweets", label: "Sweet Morning" },
   { id: "brunch", label: "Light & Savory Brunch" },

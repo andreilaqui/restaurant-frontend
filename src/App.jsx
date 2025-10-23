@@ -26,7 +26,7 @@ function App() {
   return (
     <BrowserRouter>
       <Header />
-      <div className="container p-6">
+      <div className="min-h-screen max-w-max">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/menu" element={<MenuPage />} />

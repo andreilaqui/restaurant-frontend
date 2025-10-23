@@ -9,8 +9,9 @@ import React from 'react';
 //import menuItems from "../../data/menuItems";
 
 // 🧱 Components
-import MenuCard from "../../components/customer/MenuCard";
 import PageWrapper from '../../components/common/PageWrapper';
+import MenuCard from "../../components/customer/MenuCard";
+import CategoryCircleIcon from "../../components/customer/CategoryCircleIcon";
 
 // 🛠 Services
 import { getMenuItems, getCategories, getMenuItemsByCategory } from '../../services/menuService';
@@ -32,33 +33,14 @@ function MenuPage() {
         </h1>
 
         <div className="flex gap-3 justify-center mb-8 flex-wrap">
-          {/* All tab */}
-          <button
-            onClick={() => setActiveCategory("all")}
-            className={`px-4 py-2 rounded border transition
-                        ${activeCategory === "all"
-                          ? "bg-sunrice-brown text-white border-sunrice-brown"
-                          : "bg-sunrice-cream dark:bg-neutral-800 text-sunrice-brown dark:text-sunrice-cream border-sunrice-brown/30"
-                        }`}
-            aria-pressed={activeCategory === "all"}
-          >
-            All
-          </button>
-
-          {/* Dynamic category tabs */}
           {menuCategories.map((cat) => (
-            <button
+            <CategoryCircleIcon
               key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              className={`px-4 py-2 rounded border transition
-                          ${activeCategory === cat.id
-                            ? "bg-sunrice-brown text-white border-sunrice-brown"
-                            : "bg-sunrice-cream dark:bg-neutral-800 text-sunrice-brown dark:text-sunrice-cream border-sunrice-brown/30"
-                          }`}
-              aria-pressed={activeCategory === cat.id}
-            >
-              {cat.label}
-            </button>
+              category={cat}
+              isActive={activeCategory === cat.id}
+              onClick={setActiveCategory}
+              theme="glass"
+            />
           ))}
         </div>
 

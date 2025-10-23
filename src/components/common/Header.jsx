@@ -17,6 +17,12 @@ function Header() {
       <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
         {/* Logo / Brand */}
         <Link to="/" className="font-bold text-xl text-sunrice-brown dark:text-sunrice-yellow">
+          <img
+            src="icons/sunricelogo.png"
+            alt="Manila Sunrice Logo"
+            className="logo-img"
+            style={{ maxWidth: "48px", height: "auto", marginRight: "8px" }}
+          />
           Manila Sunrice
         </Link>
 
