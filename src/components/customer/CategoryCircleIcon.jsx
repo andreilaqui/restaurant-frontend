@@ -1,7 +1,7 @@
 import React from "react";
 import CircleIcon from "../common/CircleIcon";
 
-function CategoryCircleIcon({ category, isActive, onClick, theme = "glass" }) {
+function CategoryCircleIcon({ category, isActive, onClick}) {
   return (
     <button
       onClick={() => onClick(category.id)}
@@ -13,7 +13,6 @@ function CategoryCircleIcon({ category, isActive, onClick, theme = "glass" }) {
         id={category.id}
         label={category.label}
         iconSrc={`/icons/${category.id}.png`}
-        theme={theme}
       />
     </button>
   );

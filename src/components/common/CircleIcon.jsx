@@ -1,22 +1,27 @@
 import React from "react";
 
-function CircleIcon({ id, label, iconSrc, theme = "glass" }) {
+function CircleIcon({ id, label, iconSrc }) {
   const pathId = `circlePath-${id}`;
 
-  // Shared base styles
-  const baseClasses =
-    "absolute inset-0 rounded-full flex items-center justify-center transition";
+  // // Shared base styles
+  // const baseClasses =
+  //   "absolute inset-0 rounded-full flex items-center justify-center transition";
 
-  // Theme variants
-  const themeClasses =
-    theme === "glass"
-      ? "bg-white/20 backdrop-blur-md border border-white/30 shadow-lg"
-      : "bg-sunrice-cream shadow-[6px_6px_12px_rgba(0,0,0,0.2),-6px_-6px_12px_rgba(255,255,255,0.7)]";
+  // // Theme variants
+  // const themeClasses = "bg-white/20 backdrop-blur-md border border-white/30 shadow-lg dark:bg-sunrice-cream dark:shadow-[6px_6px_12px_rgba(0,0,0,0.2),-6px_-6px_12px_rgba(255,255,255,0.7)]";
+
+  const twClass = `absolute inset-0 rounded-full flex items-center justify-center transition
+    bg-moonrice-brown/90 backdrop-blur-md 
+    border border-white/30 shadow-lg
+    dark:bg-white/10 
+    dark:border-white/10
+    dark:shadow-[6px_6px_30px_rgba(0,0,0,0.4),-6px_-6px_12px_rgba(255,255,255,0.1)]
+  `;
 
   return (
     <div className="relative w-24 h-24">
       {/* Circle background */}
-      <div className={`${baseClasses} ${themeClasses}`}>
+      <div className={`${twClass}`}>
         {iconSrc && <img src={iconSrc} alt={label} className="w-20 h-20" />}
       </div>
 
@@ -32,7 +37,7 @@ function CircleIcon({ id, label, iconSrc, theme = "glass" }) {
           fill="#A8D5BA"
           fontSize="10"
           fontWeight="bold"
-          letterSpacing="2"
+          letterSpacing="1.5"
         >
           <textPath href={`#${pathId}`} startOffset="33%" textAnchor="middle">
             {label.toUpperCase()}

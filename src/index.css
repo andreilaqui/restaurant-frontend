@@ -3,5 +3,11 @@
 @tailwind utilities;
 
 #root {
-    @apply min-h-screen bg-sunrice-cream dark:bg-moonrice-night;
+    /* @apply min-h-screen bg-sunrice-cream dark:bg-gradient-to-br dark:from-moonrice-night dark:via-[#1a2235] dark:to-moonrice-teal; */
+    @apply min-h-screen bg-sunrice-cream/75 
+         dark:bg-gradient-to-br 
+         dark:from-moonrice-night 
+         dark:via-[#292E3D]
+         dark:to-[#122E2E];
+
 }

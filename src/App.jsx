@@ -26,7 +26,6 @@ function App() {
   return (
     <BrowserRouter>
       <Header />
-      <div className="min-h-screen max-w-max">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/menu" element={<MenuPage />} />
@@ -35,7 +34,6 @@ function App() {
           <Route path="/reservations" element={<ReservationsPage />} />
           <Route path="/login" element={<LoginPage />} />
         </Routes>
-      </div>
       <Footer />
     </BrowserRouter>
   )
