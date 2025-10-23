@@ -11,18 +11,17 @@ function Header() {
       className="
         bg-sunrice-cream text-sunrice-brown
         dark:bg-white/10 dark:backdrop-blur-md dark:border-b dark:border-white/20 dark:text-sunrice-cream
-        shadow-sm sticky top-0 z-50
-      "
+        shadow-sm sticky top-0 z-50"
     >
-      <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
+      <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-3 ">
         {/* Logo / Brand */}
-        <Link to="/" className="font-bold text-xl text-sunrice-brown dark:text-sunrice-yellow">
+        <Link to="/" className="flex items-center gap-6 font-bold text-xl text-sunrice-brown dark:text-sunrice-yellow">
           <img
             src="icons/sunricelogo.png"
             alt="Manila Sunrice Logo"
             className="logo-img"
             style={{ maxWidth: "48px", height: "auto", clear:"none" }}
-          /> Manila Sunrice
+          /> <span className="tracking-wide">Manila Sunrice</span>
         </Link>
 
         {/* Nav Links */}

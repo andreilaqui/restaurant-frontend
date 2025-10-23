@@ -11,7 +11,7 @@ function CircleIcon({ id, label, iconSrc }) {
   // const themeClasses = "bg-white/20 backdrop-blur-md border border-white/30 shadow-lg dark:bg-sunrice-cream dark:shadow-[6px_6px_12px_rgba(0,0,0,0.2),-6px_-6px_12px_rgba(255,255,255,0.7)]";
 
   const twClass = `absolute inset-0 rounded-full flex items-center justify-center transition
-    bg-moonrice-brown/90 backdrop-blur-md 
+    bg-white/80 backdrop-blur-md 
     border border-white/30 shadow-lg
     dark:bg-white/10 
     dark:border-white/10
