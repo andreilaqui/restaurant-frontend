@@ -21,9 +21,8 @@ function Header() {
             src="icons/sunricelogo.png"
             alt="Manila Sunrice Logo"
             className="logo-img"
-            style={{ maxWidth: "48px", height: "auto", marginRight: "8px" }}
-          />
-          Manila Sunrice
+            style={{ maxWidth: "48px", height: "auto", clear:"none" }}
+          /> Manila Sunrice
         </Link>
 
         {/* Nav Links */}
