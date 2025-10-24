@@ -26,6 +26,7 @@ function Header() {
 
         {/* Nav Links */}
         <nav className="flex gap-6 text-sm font-medium">
+          <Link to="/" className="hover:text-sunrice-yellow">Home</Link>
           <Link to="/menu" className="hover:text-sunrice-yellow">Menu</Link>
           <Link to="/reservations" className="hover:text-sunrice-yellow">Reservations</Link>
           <Link to="/cart" className="hover:text-sunrice-yellow">Cart</Link>

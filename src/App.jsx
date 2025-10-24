@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // 🧩 Pages
 import LoginPage from './pages/LoginPage';
+import NotFoundPage from './pages/NotFoundPage';
   // customer
 import HomePage from './pages/customer/HomePage';
 import MenuPage from './pages/customer/MenuPage';
@@ -35,6 +36,7 @@ function App() {
           <Route path="/reservations" element={<ReservationsPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       <Footer />
     </BrowserRouter>
