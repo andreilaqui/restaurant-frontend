@@ -15,6 +15,7 @@ import CartPage from './pages/customer/CartPage';
 import ContactPage from './pages/customer/ContactPage';
   // admin
 import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminReports from './pages/admin/AdminReports';
 
 // 🧱 Components
 import Header from './components/common/Header';
@@ -37,6 +38,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="*" element={<NotFoundPage />} />
+          <Route path="/reports" element={<AdminReports />} />
         </Routes>
       <Footer />
     </BrowserRouter>

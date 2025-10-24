@@ -32,6 +32,8 @@ function Header() {
           <Link to="/cart" className="hover:text-sunrice-yellow">Cart</Link>
           <Link to="/contact" className="hover:text-sunrice-yellow">Contact</Link>
           <Link to="/login" className="hover:text-sunrice-yellow">Login</Link>
+          <Link to="/admin" className="hover:text-sunrice-yellow">Admin</Link>
+          <Link to="/reports" className="hover:text-sunrice-yellow">Reports</Link>
         </nav>
 
         {/* Theme Toggle */}
