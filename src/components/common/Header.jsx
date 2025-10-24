@@ -29,6 +29,7 @@ function Header() {
           <Link to="/menu" className="hover:text-sunrice-yellow">Menu</Link>
           <Link to="/reservations" className="hover:text-sunrice-yellow">Reservations</Link>
           <Link to="/cart" className="hover:text-sunrice-yellow">Cart</Link>
+          <Link to="/contact" className="hover:text-sunrice-yellow">Contact</Link>
           <Link to="/login" className="hover:text-sunrice-yellow">Login</Link>
         </nav>
 

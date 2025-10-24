@@ -12,9 +12,9 @@ import menuItems from "../../data/menuItems";
 
 
 function CartPage() {
-  const [cart, setCart] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [checkoutSuccess, setCheckoutSuccess] = useState(null);
+  const [cart, setCart] = useState([]);                             // array for cart items
+  const [loading, setLoading] = useState(true);                     // flag for loading state
+  const [checkoutSuccess, setCheckoutSuccess] = useState(null);     // object for checkout success details
 
   // Load cart on mount
   useEffect(() => {
@@ -39,9 +39,11 @@ function CartPage() {
   const menuMap = Object.fromEntries(menuItems.map(item => [item.id, item]));
 
 
-
-
+  
   if (loading) return <PageWrapper title="Cart">Loading...</PageWrapper>;
+
+
+
 
   return (
     <PageWrapper title="Your Cart">

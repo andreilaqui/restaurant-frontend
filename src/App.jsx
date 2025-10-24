@@ -11,6 +11,7 @@ import HomePage from './pages/customer/HomePage';
 import MenuPage from './pages/customer/MenuPage';
 import ReservationsPage from './pages/customer/ReservationsPage';
 import CartPage from './pages/customer/CartPage';
+import ContactPage from './pages/customer/ContactPage';
   // admin
 import AdminDashboard from './pages/admin/AdminDashboard';
 
@@ -33,6 +34,7 @@ function App() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/reservations" element={<ReservationsPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/contact" element={<ContactPage />} />
         </Routes>
       <Footer />
     </BrowserRouter>
