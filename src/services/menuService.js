@@ -23,3 +23,18 @@ export function getMenuItemsByCategory(categoryId) {
 export function getMenuItemBySlug(slug) {
   return menuItems.find(item => item.slug === slug);
 }
+
+// Get items by tag (e.g. "vegan", "spicy")
+export function getMenuItemsByTag(tag) {
+  return menuItems.filter(item => item.tags?.includes(tag));
+}
+
+// Get items by keyword in name or description
+export function searchMenuItems(keyword) {
+  const lower = keyword.toLowerCase();
+  return menuItems.filter(item =>
+    item.name.toLowerCase().includes(lower) ||
+    item.description.toLowerCase().includes(lower)
+  );
+}
+

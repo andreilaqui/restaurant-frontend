@@ -1,4 +1,10 @@
+
 import orders from "../data/orders";
+
+// mock data
+import menuItems from "../data/menuItems";
+import cartItems from "../data/cartItems";
+
 
 let cart = [];
 
@@ -6,9 +12,33 @@ export function getOrders() {
   return Promise.resolve(orders);
 }
 
-export function getCart() {
-  return Promise.resolve(cart);
+// Simulate fetching cart
+export async function getCart() {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(cartItems), 300); // simulate delay
+  });
 }
+
+// Simulate removing item
+export async function removeFromCart(itemId) {
+  return new Promise((resolve) => {
+    const updated = cartItems.filter(item => item.itemId !== itemId);
+    setTimeout(() => resolve(updated), 300);
+  });
+}
+
+// Simulate checkout
+export async function checkout() {
+  const total = cartItems.reduce((sum, item) => {
+    const menuItem = menuItems.find(m => m.id === item.itemId);
+    return sum + (menuItem?.price || 0) * item.quantity;
+  }, 0);
+
+  return new Promise((resolve) => {
+    setTimeout(() => resolve({ id: Math.floor(Math.random() * 10000), total }), 500);
+  });
+}
+
 
 export function addToCart(itemId, quantity = 1) {
   const existing = cart.find(i => i.itemId === itemId); //check if item already in cart
@@ -18,22 +48,4 @@ export function addToCart(itemId, quantity = 1) {
     cart.push({ itemId, quantity }); //add new item
   }
   return Promise.resolve(cart);
-}
-
-export function removeFromCart(itemId) {
-  cart = cart.filter(i => i.itemId !== itemId);
-  return Promise.resolve(cart);
-}
-
-export function checkout() {
-  const total = cart.reduce((sum, i) => sum + i.quantity * 10, 0); // placeholder pricing
-  const newOrder = {
-    id: orders.length + 1,
-    items: [...cart],
-    total,
-    status: "pending",
-  };
-  orders.push(newOrder);
-  cart = [];
-  return Promise.resolve(newOrder);
 }

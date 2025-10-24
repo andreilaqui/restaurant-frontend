@@ -9,7 +9,7 @@ function ContactPage() {
     <PageWrapper title="Contact Us">
       <div className="grid gap-8 md:grid-cols-2">
         {/* Contact Info */}
-        <div className="space-y-4">
+        <div className="space-y-4  dark:text-gray-300">
           <h2 className="text-lg font-semibold text-sunrice-brown dark:text-sunrice-yellow">
             Manila Sunrice — Calgary Location
           </h2>
