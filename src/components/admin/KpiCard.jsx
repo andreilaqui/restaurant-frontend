@@ -19,4 +19,4 @@ function KpiCard({ totalOrders, totalRevenue, timeRangeLabel }) {
   );
 }
 
-export default KpiCards
+export default KpiCard
