@@ -1,6 +1,6 @@
 import React from "react";
 
-function KpiCards({ totalOrders, totalRevenue, timeRangeLabel }) {
+function KpiCard({ totalOrders, totalRevenue, timeRangeLabel }) {
   return (
     <div className="grid gap-6 md:grid-cols-3">
       <div className="p-4 bg-white dark:bg-white/10 rounded-lg shadow">

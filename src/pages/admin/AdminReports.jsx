@@ -3,7 +3,7 @@ import PageWrapper from "../../components/common/PageWrapper";
 
 // Admin components
 import TimeRangeSelector from "../../components/admin/TimeRangeSelector";
-import KpiCards from "../../components/admin/KpiCardsFixAttempt";
+import KpiCard from "../../components/admin/KpiCard";
 import ChartsSection from "../../components/admin/ChartsSection";
 import OrdersBreakdown from "../../components/admin/OrdersBreakdown";
 import ReservationsSummary from "../../components/admin/ReservationsSummary";
@@ -129,7 +129,7 @@ function AdminReports() {
           setTimeRange={setTimeRange}
         />
 
-        <KpiCards
+        <KpiCard
           totalOrders={totalOrders}
           totalRevenue={totalRevenue}
           timeRangeLabel={ranges.find((r) => r.id === timeRange)?.label}
