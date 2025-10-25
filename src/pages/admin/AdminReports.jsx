@@ -3,7 +3,7 @@ import PageWrapper from "../../components/common/PageWrapper";
 
 // Admin components
 import TimeRangeSelector from "../../components/admin/TimeRangeSelector";
-import KpiCards from "../../components/admin/KpiCards";
+import KpiCards from "../../components/admin/KpiCardsFixAttempt";
 import ChartsSection from "../../components/admin/ChartsSection";
 import OrdersBreakdown from "../../components/admin/OrdersBreakdown";
 import ReservationsSummary from "../../components/admin/ReservationsSummary";
