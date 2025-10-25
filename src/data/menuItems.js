@@ -11,6 +11,7 @@ const menuItems = [
     price: 17,
     tags: [TAGS.BESTSELLER],
     image: "/menu/classic-tapsilog.jpg",
+    availability: true,
   },
   {
     id: 2,
@@ -20,6 +21,7 @@ const menuItems = [
     category: "rice",
     price: 16,
     image: "/menu/longsilog-remix.jpg",
+    availability: true,
   },
   {
     id: 3,
@@ -30,6 +32,7 @@ const menuItems = [
     price: 15,
     tags: [TAGS.VEGETARIAN, TAGS.SPICY],
     image: "/menu/tofu-sisig-silog.jpg",
+    availability: true,
   },
   {
     id: 4,
@@ -40,6 +43,7 @@ const menuItems = [
     price: 19,
     tags: [TAGS.NEW],
     image: "/menu/salmon-belly-silog.jpg",
+    availability: true,
   },
   {
     id: 5,
@@ -49,6 +53,7 @@ const menuItems = [
     category: "rice",
     price: 18,
     image: "/menu/beef-pares-silog.jpg",
+    availability: true,
   },
 
   // 🥞 Sweet Morning
@@ -61,6 +66,7 @@ const menuItems = [
     price: 15,
     tags: [TAGS.BESTSELLER],
     image: "/menu/ube-fluff-pancakes.jpg",
+    availability: true,
   },
   {
     id: 7,
@@ -70,6 +76,7 @@ const menuItems = [
     category: "sweets",
     price: 16,
     image: "/menu/mango-graham-french-toast.jpg",
+    availability: true,
   },
   {
     id: 8,
@@ -79,6 +86,7 @@ const menuItems = [
     category: "sweets",
     price: 15,
     image: "/menu/pandan-coconut-waffles.jpg",
+    availability: true,
   },
   {
     id: 9,
@@ -89,6 +97,7 @@ const menuItems = [
     price: 16,
     tags: [TAGS.NEW],
     image: "/menu/tres-leches-ensaymada-stack.jpg",
+    availability: true,
   },
 
   // 🥪 Light & Savory Brunch
@@ -100,6 +109,7 @@ const menuItems = [
     category: "brunch",
     price: 17,
     image: "/menu/chicken-inasal-sandwich.jpg",
+    availability: true,
   },
   {
     id: 11,
@@ -110,6 +120,7 @@ const menuItems = [
     price: 14,
     tags: [TAGS.BESTSELLER],
     image: "/menu/spam-egg-drop-bun.jpg",
+    availability: true,
   },
   {
     id: 12,
@@ -120,6 +131,7 @@ const menuItems = [
     price: 16,
     tags: [TAGS.VEGETARIAN],
     image: "/menu/adobo-mushroom-melt.jpg",
+    availability: true,
   },
   {
     id: 13,
@@ -129,6 +141,7 @@ const menuItems = [
     category: "brunch",
     price: 15,
     image: "/menu/tinapa-caesar-wrap.jpg",
+    availability: true,
   },
 
   // 🍲 Bowls & Comfort
@@ -140,6 +153,7 @@ const menuItems = [
     category: "bowl",
     price: 14,
     image: "/menu/lolas-arroz-caldo.jpg",
+    availability: true,
   },
   {
     id: 15,
@@ -150,6 +164,7 @@ const menuItems = [
     price: 15,
     tags: [TAGS.VEGETARIAN, TAGS.NEW],
     image: "/menu/truffle-lugaw.jpg",
+    availability: true,
   },
   {
     id: 16,
@@ -159,6 +174,7 @@ const menuItems = [
     category: "bowl",
     price: 16,
     image: "/menu/crispy-pork-palabok-bowl.jpg",
+    availability: true,
   },
   {
     id: 17,
@@ -169,6 +185,7 @@ const menuItems = [
     price: 12,
     tags: [TAGS.VEGAN],
     image: "/menu/ginataang-mais.jpg",
+    availability: true,
   },
 
   // ☕ Coffee & Sips
@@ -181,6 +198,7 @@ const menuItems = [
     price: 6,
     tags: [TAGS.BESTSELLER],
     image: "/menu/barako-latte.jpg",
+    availability: true,
   },
   {
     id: 19,
@@ -190,6 +208,7 @@ const menuItems = [
     category: "drinks",
     price: 6,
     image: "/menu/pandan-cold-brew.jpg",
+    availability: true,
   },
   {
     id: 20,
@@ -200,6 +219,7 @@ const menuItems = [
     price: 5,
     tags: [TAGS.NEW],
     image: "/menu/calamansi-iced-tea.jpg",
+    availability: true,
   },
   {
     id: 21,
@@ -209,6 +229,7 @@ const menuItems = [
     category: "drinks",
     price: 6,
     image: "/menu/tablea-hot-chocolate.jpg",
+    availability: true,
   },
   {
     id: 22,
@@ -218,6 +239,7 @@ const menuItems = [
     category: "drinks",
     price: 6,
     image: "/menu/latik-dirty-matcha.jpg",
+    availability: true,
   },
 
   // 🍰 Desserts & Little Joys
@@ -230,6 +252,7 @@ const menuItems = [
     price: 5,
     tags: [TAGS.BESTSELLER],
     image: "/menu/ube-pastelito.jpg",
+    availability: true,
   },
   {
     id: 24,
@@ -239,6 +262,7 @@ const menuItems = [
     category: "desserts",
     price: 7,
     image: "/menu/leche-flan-cheesecake-pot.jpg",
+    availability: true,
   },
   {
     id: 25,
@@ -248,6 +272,7 @@ const menuItems = [
     category: "desserts",
     price: 6,
     image: "/menu/turon-salted-caramel-dip.jpg",
+    availability: true,
   },
   {
     id: 26,
@@ -258,6 +283,7 @@ const menuItems = [
     price: 8,
     tags: [TAGS.NEW],
     image: "/menu/bibingka-basque-burnt-cheesecake.jpg",
+    availability: true,
   },
 ];
 

@@ -32,6 +32,7 @@ function AdminDashboard() {
                 <th className="py-2">Category</th>
                 <th className="py-2">Price</th>
                 <th className="py-2">Description</th>
+                <th className="py-2">Availability</th>
                 <th className="py-2">Actions</th>
               </tr>
             </thead>
@@ -43,6 +44,13 @@ function AdminDashboard() {
                   <td className="py-2">${item.price}</td>
                   <td className="py-2 max-w-xs truncate" title={item.description}>
                     {item.description}
+                  </td>
+                  <td className="py-2">
+                    {item.availability === true ? (
+                      <span className="text-green-600 dark:text-green-400 font-semibold">Available</span>
+                    ) : (
+                      <span className="text-red-600 dark:text-red-400 font-semibold">Unavailable</span>
+                    )}
                   </td>
                   <td className="py-2 space-x-2">
                     <button
@@ -158,6 +166,10 @@ function AdminDashboard() {
                   rows={3}
                   className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
                 />
+              </div>
+              <div>
+                <label className="inline-flex items-center mr-2">Available</label> 
+                <input type="checkbox" checked></input>
               </div>
               <div className="flex justify-end space-x-2">
                 <button
