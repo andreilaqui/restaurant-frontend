@@ -49,3 +49,15 @@ export function addToCart(itemId, quantity = 1) {
   }
   return Promise.resolve(cart);
 }
+
+// Update quantity of a cart item
+export async function updateCartItemQuantity(itemId, quantity) {
+  // For mock data, just simulate update
+  const cart = await getCart();
+  const updated = cart.map(item =>
+    item.itemId === itemId ? { ...item, quantity } : item
+  );
+  
+  return updated.filter(item => item.quantity > 0);
+}
+

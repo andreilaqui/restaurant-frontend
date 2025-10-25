@@ -11,28 +11,39 @@ function MenuCard({ item }) {
             dark:bg-white/10 dark:backdrop-blur-md dark:border dark:border-white/20 
             dark:shadow-none
           ">
-        <img
-          src={item.image}
-          alt={item.name}
-          className="w-full h-48 object-cover rounded-lg mb-3"
-        />
-        <h3 className="font-semibold text-lg text-sunrice-brown dark:text-sunrice-yellow">{item.name}</h3>
-        <p className="text-sm text-sunrice-brown/80 dark:text-sunrice-cream/90">{item.description}</p>
-        <div className="mt-2 flex flex-wrap gap-2">
-          {item.tags?.map((tag) => (
-            <span
-              key={tag}
-              className="text-xs 
+      <img
+        src={item.image}
+        alt={item.name}
+        className="w-full h-48 object-cover rounded-lg mb-3"
+      />
+      <h3 className="font-semibold text-lg text-sunrice-brown dark:text-sunrice-yellow">{item.name}</h3>
+      <p className="text-sm text-sunrice-brown/80 dark:text-sunrice-cream/90">{item.description}</p>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {item.tags?.map((tag) => (
+          <span
+            key={tag}
+            className="text-xs 
              bg-sunrice-green text-sunrice-brown 
              dark:bg-sunrice-green/50 dark:text-sunrice-cream 
              px-2 py-1 rounded-full"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-        <p className="mt-3 font-bold text-sunrice-yellow dark:text-sunrice-yellow">${item.price}</p>
+          >
+            {tag}
+          </span>
+        ))}
       </div>
+      <p className="mt-3 font-bold text-sunrice-yellow dark:text-sunrice-yellow">${item.price}</p>
+      {item.availability ? (
+        <button
+          onClick={() => addToCart(item)}
+          className="px-3 py-1 bg-sunrice-brown text-white rounded hover:bg-sunrice-yellow hover:text-sunrice-brown transition"
+        >
+          Add to Cart
+        </button>
+      ) : (
+        <span className="text-red-500 font-semibold">Not Available</span>
+      )}
+
+    </div>
   );
 
 }
