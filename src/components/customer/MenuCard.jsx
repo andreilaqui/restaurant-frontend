@@ -5,14 +5,14 @@ function MenuCard({ item }) {
   const { cart, setCart } = useCart();
 
   const addToCart = () => {
-    const isExisting = cart.find( (cartItem) => cartItem.id === item.id);
+    const isExisting = cart.find((cartItem) => cartItem.id === item.id);
 
     if (isExisting) {
-      setCart( 
-        cart.map( (cartItem) =>
-        //look through cart, when you find the item, increase quantity by 1
-        cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
-        ) 
+      setCart(
+        cart.map((cartItem) =>
+          //look through cart, when you find the item, increase quantity by 1
+          cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
+        )
       );
       return;
     } else {
@@ -20,7 +20,7 @@ function MenuCard({ item }) {
       setCart([...cart, { ...item, quantity: 1 }]);
     }
 
-      
+
 
   };
 
@@ -33,6 +33,7 @@ function MenuCard({ item }) {
             transition 
             dark:bg-white/10 dark:backdrop-blur-md dark:border dark:border-white/20 
             dark:shadow-none
+            flex flex-col h-full
           ">
       <img
         src={item.image}
@@ -54,17 +55,25 @@ function MenuCard({ item }) {
           </span>
         ))}
       </div>
-      <p className="mt-3 font-bold text-sunrice-yellow dark:text-sunrice-yellow">${item.price}</p>
-      {item.availability ? (
-        <button
-          onClick={() => addToCart(item)}
-          className="px-3 py-1 bg-sunrice-brown text-white rounded hover:bg-sunrice-yellow hover:text-sunrice-brown transition"
-        >
-          Add to Cart
-        </button>
-      ) : (
-        <span className="text-red-500 font-semibold">Not Available</span>
-      )}
+      <div className="mt-auto flex items-baseline justify-between">
+        <p className="font-bold text-sunrice-brown dark:text-sunrice-yellow">
+          ${item.price}
+        </p>
+        {item.availability ? (
+          <button
+            onClick={() => {
+              addToCart(item);
+              alert(`Added ${item.name} to cart!`);
+            }}
+            className="px-3 py-1 bg-sunrice-yellow text-sunrice-brown rounded hover:bg-sunrice-yellow hover:text-sunrice-brown transition"
+          >
+            Add to Cart
+          </button>
+        ) : (
+          <span className="text-red-500 font-semibold">Not Available</span>
+        )}
+      </div>
+
 
     </div>
   );
