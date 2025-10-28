@@ -21,7 +21,7 @@ import AdminReports from './pages/admin/AdminReports';
 import Header from './components/common/Header';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
-
+import ScrollUp from './components/common/ScrollUp';
 
 
 function App() {
@@ -29,6 +29,9 @@ function App() {
   return (
     <BrowserRouter>
       <Header />
+      
+      <ScrollUp /> {/* will scroll up the page when route changes  */}
+      
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/menu" element={<MenuPage />} />
