@@ -32,7 +32,7 @@ function ChartsSection({ ordersPerDay, revenueByCategory, orderTrend }) {
     <section className="grid gap-6 md:grid-cols-3">
       <div className="bg-white dark:bg-white/10 p-4 pb-10 rounded-lg shadow max-h-[300px]">
         <h2 className="text-md font-bold mb-2">Orders Per Day</h2>
-        <Bar data={ordersPerDay} options={{ maintainAspectRatio: false }} />
+        <Bar data={ordersPerDay} options={{ maintainAspectRatio: false }}/>
       </div>
       <div className="bg-white dark:bg-white/10 p-4 pb-10 rounded-lg shadow max-h-[300px]">
         <h2 className="text-md font-bold mb-2">Revenue by Category</h2>

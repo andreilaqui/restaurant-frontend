@@ -18,7 +18,7 @@ function AdminDashboard() {
 
   return (
     <PageWrapper title="Admin Dashboard">
-      <div className="space-y-10">
+      <div className="space-y-10 dark:text-white/80">
         
         {/* Menu Management */}
         <section className="bg-white dark:bg-white/10 p-6 rounded-xl shadow-md overflow-x-auto">

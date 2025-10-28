@@ -122,7 +122,7 @@ function AdminReports() {
   return (
     <PageWrapper title="Admin Reports">
       {/* Add vertical spacing between sections */}
-      <div className="space-y-10">
+      <div className="space-y-10 dark:text-white/80">
         <TimeRangeSelector
           ranges={ranges}
           timeRange={timeRange}
