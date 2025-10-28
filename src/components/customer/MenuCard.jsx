@@ -1,6 +1,29 @@
 import React from 'react'
+import { useCart } from '../../context/CartContext';
 
 function MenuCard({ item }) {
+  const { cart, setCart } = useCart();
+
+  const addToCart = () => {
+    const isExisting = cart.find( (cartItem) => cartItem.id === item.id);
+
+    if (isExisting) {
+      setCart( 
+        cart.map( (cartItem) =>
+        //look through cart, when you find the item, increase quantity by 1
+        cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
+        ) 
+      );
+      return;
+    } else {
+      //item not in cart, add it with quantity 1
+      setCart([...cart, { ...item, quantity: 1 }]);
+    }
+
+      
+
+  };
+
   return (
     <div className="
             bg-sunrice-cream
