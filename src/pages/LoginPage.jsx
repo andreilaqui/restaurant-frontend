@@ -50,6 +50,9 @@ function LoginPage() {
             Login
           </button>
           {error && <p className="text-red-500">{error}</p>}
+          <p>
+            Don’t have an account? <a href="/signup">Sign up here</a>
+          </p>
         </form>
       </div>
     </PageWrapper>

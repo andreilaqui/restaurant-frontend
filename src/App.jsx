@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // 🧩 Pages
 import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
 import NotFoundPage from './pages/NotFoundPage';
   // customer
 import HomePage from './pages/customer/HomePage';
@@ -24,6 +25,7 @@ import Footer from './components/common/Footer';
 import ScrollUp from './components/common/ScrollUp';
 
 
+
 function App() {
 
   return (
@@ -39,6 +41,7 @@ function App() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/reservations" element={<ReservationsPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="*" element={<NotFoundPage />} />
           <Route path="/reports" element={<AdminReports />} />
