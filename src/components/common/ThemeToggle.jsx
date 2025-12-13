@@ -16,7 +16,7 @@ function ThemeToggle() {
   return (
     <button
       onClick={() => setDark(!dark)}
-      className="h-10 w-10 flex items-center justify-center rounded-full dark:bg-sunrice-yellow bg-moonrice-teal text-sunrice-brown shadow"
+      className="h-8 w-8 flex items-center justify-center rounded-full dark:bg-sunrice-yellow bg-moonrice-teal text-sunrice-brown shadow"
     
     >
       {dark ? (
