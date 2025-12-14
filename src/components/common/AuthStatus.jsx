@@ -1,15 +1,22 @@
-import React from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function AuthStatus() {
   const navigate = useNavigate();
-  const token = localStorage.getItem("accessToken");
-  const username = localStorage.getItem("username");
+  
+  // initialize state from localStorage
+  const [token, setToken] = useState(localStorage.getItem("accessToken"));
+  const [username, setUsername] = useState(localStorage.getItem("username"));
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("username");
+    localStorage.removeItem("role");
+
+    setToken(null);
+    setUsername(null);
+
     navigate("/login");
   };
 
@@ -17,7 +24,7 @@ function AuthStatus() {
     <div className="flex items-center gap-2 text-sm whitespace-nowrap">
       {token ? (
         <>
-          <span className="px-2 py-1 rounded-full bg-sunrice-accent text-sunrice-brown font-medium">
+          <span className="px-2 py-1 rounded-full bg-sunrice-accent text-sunrice-brown dark:text-sunrice-green font-medium">
             {username ? `Welcome, ${username}` : "Logged in"}
           </span>
           <button

@@ -1,19 +1,24 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import api from "../utils/api";
 import PageWrapper from "../components/common/PageWrapper";
+import { AuthContext } from "../context/AuthContext"; 
+
 
 function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { login } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const res = await api.post("/auth/login", { username, password });
-      localStorage.setItem("accessToken", res.data.accessToken);
-      localStorage.setItem("refreshToken", res.data.refreshToken);
-      localStorage.setItem("username", username);
+      // localStorage.setItem("accessToken", res.data.accessToken);
+      // localStorage.setItem("refreshToken", res.data.refreshToken);
+      // localStorage.setItem("username", res.data.user.username);
+      // localStorage.setItem("role", res.data.user.role);
+      login(res.data); //change from localStorage to context
       window.location.href = "/";
     } catch (err) {
       setError(err.response?.data?.error || "Login failed");
@@ -26,7 +31,7 @@ function LoginPage() {
         className="
           max-w-md mx-auto rounded-xl p-6 shadow-lg
           bg-sunrice-cream text-sunrice-brown
-          dark:bg-opacity-30 dark:bg-sunrice-brown dark:backdrop-blur-md dark:text-sunrice-cream
+          dark:bg-opacity-5 dark:bg-sunrice-brown dark:backdrop-blur-md 
         "
       >
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -51,7 +56,7 @@ function LoginPage() {
             Login
           </button>
           {error && <p className="text-red-500">{error}</p>}
-          <p>
+          <p className="dark:text-sunrice-cream">
             Don’t have an account? <a href="/signup">Sign up here</a>
           </p>
         </form>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "../utils/api";
 import PageWrapper from "../components/common/PageWrapper";
+import { AuthContext } from "../context/AuthContext";
 
 function SignupPage() {
   const [username, setUsername] = useState("");
@@ -9,34 +10,18 @@ function SignupPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [validationErrors, setValidationErrors] = useState([]);
+  const { login } = useContext(AuthContext);
 
   const validateForm = () => {
     const errors = [];
 
-    if (!username.trim()) {
-      errors.push("Username is required");
-    }
-
-    if (password.length < 8) {
-      errors.push("Password must be at least 8 characters long");
-    }
-    if (!/[A-Z]/.test(password)) {
-      errors.push("Password must contain at least one uppercase letter");
-    }
-    if (!/[0-9]/.test(password)) {
-      errors.push("Password must contain at least one number");
-    }
-    if (!/[^A-Za-z0-9]/.test(password)) {
-      errors.push("Password must contain at least one special character");
-    }
-
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      errors.push("Invalid email address");
-    }
-
-    if (phone && !/^\+?[0-9]{7,15}$/.test(phone)) {
-      errors.push("Invalid phone number");
-    }
+    if (!username.trim()) { errors.push("Username is required"); }
+    if (password.length < 8) { errors.push("Password must be at least 8 characters long"); }
+    if (!/[A-Z]/.test(password)) { errors.push("Password must contain at least one uppercase letter"); }
+    if (!/[0-9]/.test(password)) { errors.push("Password must contain at least one number"); }
+    if (!/[^A-Za-z0-9]/.test(password)) { errors.push("Password must contain at least one special character"); }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errors.push("Invalid email address"); }
+    if (phone && !/^\+?[0-9]{7,15}$/.test(phone)) { errors.push("Invalid phone number"); }
 
     setValidationErrors(errors);
     return errors.length === 0;
@@ -47,15 +32,12 @@ function SignupPage() {
     if (!validateForm()) return;
 
     try {
-      const res = await api.post("/auth/signup", {
-        username,
-        email,
-        phone,
-        password,
-      });
-
-      localStorage.setItem("accessToken", res.data.accessToken);
-      localStorage.setItem("refreshToken", res.data.refreshToken);
+      const res = await api.post("/auth/signup", { username, email, phone, password, });
+      // localStorage.setItem("accessToken", res.data.accessToken);
+      // localStorage.setItem("refreshToken", res.data.refreshToken);
+      // localStorage.setItem("username", res.data.username);
+      // localStorage.setItem("role", res.data.role);
+      login(res.data); //login via context instead of localStorage only
 
       window.location.href = "/menu"; // redirect after signup
     } catch (err) {

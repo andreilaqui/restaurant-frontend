@@ -1,6 +1,6 @@
 // 🔧 Core React
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext } from "react";
 
 // 🧱 Components
 import ThemeToggle from "./ThemeToggle";
@@ -9,8 +9,14 @@ import AuthStatus from "./AuthStatus";
 // 🎨 Styling
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
+// 🛡️ Context
+import { AuthContext } from "../../context/AuthContext"; // adjust path if needed
+
+
 function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  //const role = localStorage.getItem("role");
+  const { role } = useContext(AuthContext); 
 
   return (
     <header className="bg-sunrice-cream text-sunrice-brown
@@ -36,8 +42,12 @@ function Header() {
           <Link to="/reservations" className="hover:text-sunrice-yellow">Reservations</Link>
           <Link to="/cart" className="hover:text-sunrice-yellow">Cart</Link>
           <Link to="/contact" className="hover:text-sunrice-yellow">Contact</Link>
-          <Link to="/admin" className="hover:text-sunrice-yellow">Dashboard</Link>
-          <Link to="/reports" className="hover:text-sunrice-yellow">Reports</Link>
+          {role === "admin" && (
+            <>
+              <Link to="/admin" className="hover:text-sunrice-yellow">Dashboard</Link>
+              <Link to="/reports" className="hover:text-sunrice-yellow">Reports</Link>
+            </>
+          )}
           <span className="pl-3 ml-3 border-l border-sunrice-brown dark:border-sunrice-cream">
             <AuthStatus />
           </span>
@@ -67,24 +77,26 @@ function Header() {
           <Link to="/cart" className="hover:text-sunrice-yellow">Cart</Link>
           <Link to="/contact" className="hover:text-sunrice-yellow">Contact</Link>
 
-
-
           {/* Admin Group */}
-          <div className="pt-4 border-t dark:border-white/20 flex flex-col space-y-2">
-            <p className="text-xs uppercase tracking-wide text-sunrice-brown dark:text-sunrice-yellow mb-2">
-              Admin
-            </p>
-            <Link to="/admin" className="block pl-2 hover:text-sunrice-yellow">
-              Dashboard
-            </Link>
-            <Link to="/reports" className="block pl-2 hover:text-sunrice-yellow">
-              Reports
-            </Link>
-          </div>
+          {role === "admin" && (
+            <>
+              <div className="pt-4 border-t dark:border-white/20 flex flex-col space-y-2">
+                <p className="text-xs uppercase tracking-wide text-sunrice-brown dark:text-sunrice-yellow mb-2">
+                  Admin
+                </p>
+                <Link to="/admin" className="block pl-2 hover:text-sunrice-yellow">
+                  Dashboard
+                </Link>
+                <Link to="/reports" className="block pl-2 hover:text-sunrice-yellow">
+                  Reports
+                </Link>
+              </div>
+            </>
+          )}
 
           <div className="pt-4 border-t dark:border-white/20">
-  <AuthStatus />
-</div>
+            <AuthStatus />
+          </div>
 
 
 
