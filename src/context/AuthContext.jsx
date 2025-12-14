@@ -24,7 +24,11 @@ export function AuthProvider({ children }) {
 
   // called on logout
   const logout = () => {
-    localStorage.clear();
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("username");
+    localStorage.removeItem("role");
+
     setToken(null);
     setRefreshToken(null);
     setUsername(null);

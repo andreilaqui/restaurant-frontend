@@ -1,24 +1,16 @@
-import { useState } from "react";
+import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext"; // adjust path if needed
 
 function AuthStatus() {
+  const { token, username, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-  
-  // initialize state from localStorage
-  const [token, setToken] = useState(localStorage.getItem("accessToken"));
-  const [username, setUsername] = useState(localStorage.getItem("username"));
 
   const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("username");
-    localStorage.removeItem("role");
-
-    setToken(null);
-    setUsername(null);
-
-    navigate("/login");
+    logout();          // clears auth state + localStorage
+    navigate("/login"); // redirect to login page
   };
+
 
   return (
     <div className="flex items-center gap-2 text-sm whitespace-nowrap">

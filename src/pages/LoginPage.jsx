@@ -57,7 +57,7 @@ function LoginPage() {
           </button>
           {error && <p className="text-red-500">{error}</p>}
           <p className="dark:text-sunrice-cream">
-            Don’t have an account? <a href="/signup">Sign up here</a>
+            Don’t have an account? <a href="/signup" className="text-red-600 dark:text-red-400">Sign up here</a>
           </p>
         </form>
       </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import api from "../utils/api";
 import PageWrapper from "../components/common/PageWrapper";
 import { AuthContext } from "../context/AuthContext";
@@ -32,16 +32,20 @@ function SignupPage() {
     if (!validateForm()) return;
 
     try {
-      const res = await api.post("/auth/signup", { username, email, phone, password, });
+      const payload = { username, password };
+      if (email && email.trim() !== "") payload.email = email; //don't bother sending if blank
+      if (phone && phone.trim() !== "") payload.phone = phone;
+      const res = await api.post("/auth/signup", payload);
+
       // localStorage.setItem("accessToken", res.data.accessToken);
       // localStorage.setItem("refreshToken", res.data.refreshToken);
       // localStorage.setItem("username", res.data.username);
       // localStorage.setItem("role", res.data.role);
       login(res.data); //login via context instead of localStorage only
-
-      window.location.href = "/menu"; // redirect after signup
+      window.location.href = "/";
     } catch (err) {
-      setError(err.response?.data?.error || "Signup failed");
+      const message = err.response?.data?.error || err.response?.data?.message || err.message || "Signup failed";
+      setError(message);
       console.error("Signup error:", err.response?.data);
     }
   };
@@ -104,7 +108,7 @@ function SignupPage() {
           {error && <p className="text-red-500">{error}</p>}
 
           <p>
-            Already have an account? <a href="/login">Log in here</a>
+            Already have an account? <a href="/login" className="text-red-600 dark:text-red-400">Log in here</a>
           </p>
         </form>
       </div>
