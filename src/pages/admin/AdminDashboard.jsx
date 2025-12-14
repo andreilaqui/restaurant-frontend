@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import PageWrapper from "../../components/common/PageWrapper";
+import AdminSectionHeader from "../../components/admin/AdminSectionHeader";
+import AdminMenuList from "../../components/admin/AdminMenuList";
+
 
 // Mock data
 import menuItems from "../../data/menuItems";
@@ -8,6 +11,8 @@ import orders from "../../data/orders";
 
 function AdminDashboard() {
   const [editingItem, setEditingItem] = useState(null);
+  const [viewMode, setViewMode] = useState("compact");
+
 
   // Helper: badge styles for order status
   const statusClasses = {
@@ -19,58 +24,24 @@ function AdminDashboard() {
   return (
     <PageWrapper title="Admin Dashboard">
       <div className="space-y-10 dark:text-white/80">
-        
+
         {/* Menu Management */}
-        <section className="bg-white dark:bg-white/10 p-6 rounded-xl shadow-md overflow-x-auto">
-          <h2 className="text-xl font-bold text-sunrice-brown dark:text-sunrice-yellow mb-4">
-            Menu Management
-          </h2>
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b dark:border-gray-700">
-                <th className="py-2">Name</th>
-                <th className="py-2">Category</th>
-                <th className="py-2">Price</th>
-                <th className="py-2">Description</th>
-                <th className="py-2">Availability</th>
-                <th className="py-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {menuItems.slice(0, 5).map(item => (
-                <tr key={item.id} className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-white/5">
-                  <td className="py-2">{item.name}</td>
-                  <td className="py-2 capitalize">{item.category}</td>
-                  <td className="py-2">${item.price}</td>
-                  <td className="py-2 max-w-xs truncate" title={item.description}>
-                    {item.description}
-                  </td>
-                  <td className="py-2">
-                    {item.availability === true ? (
-                      <span className="text-green-600 dark:text-green-400 font-semibold">Available</span>
-                    ) : (
-                      <span className="text-red-600 dark:text-red-400 font-semibold">Unavailable</span>
-                    )}
-                  </td>
-                  <td className="py-2 space-x-2">
-                    <button
-                      onClick={() => setEditingItem(item)}
-                      className="px-2 py-1 text-sm bg-sunrice-green text-white rounded hover:bg-green-400 transition"
-                    >
-                      Edit
-                    </button>
-                    <button className="px-2 py-1 text-sm bg-red-500/40 text-white rounded hover:bg-red-600 transition">
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <p className="mt-2 text-sm text-sunrice-brown dark:text-sunrice-yellow">
-            Showing {Math.min(5, menuItems.length)} of {menuItems.length} items
-          </p>
+        <section className="bg-white/80 dark:bg-white/10 p-6 rounded-xl shadow-md overflow-x-auto">
+          <AdminSectionHeader
+            title="Menu Management"
+            toggleLabel={viewMode === "compact" ? "View All" : "Compact View"}
+            onToggle={() =>
+              setViewMode(viewMode === "compact" ? "expanded" : "compact")
+            }
+          />
+          <AdminMenuList
+            viewMode={viewMode}
+            onEdit={(item) => setEditingItem(item)}
+            onDelete={(item) => console.log("Delete", item)}
+          />
+
         </section>
+
 
         {/* Reservations Viewer */}
         <section className="bg-white dark:bg-white/10 p-6 rounded-xl shadow-md overflow-x-auto">
@@ -168,7 +139,7 @@ function AdminDashboard() {
                 />
               </div>
               <div>
-                <label className="inline-flex items-center mr-2">Available</label> 
+                <label className="inline-flex items-center mr-2">Available</label>
                 <input type="checkbox" checked></input>
               </div>
               <div className="flex justify-end space-x-2">
