@@ -4,6 +4,7 @@ import { useState } from "react";
 
 // 🧱 Components
 import ThemeToggle from "./ThemeToggle";
+import AuthStatus from "./AuthStatus";
 
 // 🎨 Styling
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -26,16 +27,21 @@ function Header() {
           <span className="tracking-wide">Manila Sunrice</span>
         </Link>
 
+
+
         {/* Desktop Nav */}
-        <nav className="hidden sm:flex gap-6 text-sm font-medium">
+        <nav className="hidden sm:flex items-center gap-6 text-sm font-medium">
           <Link to="/" className="hover:text-sunrice-yellow">Home</Link>
           <Link to="/menu" className="hover:text-sunrice-yellow">Menu</Link>
           <Link to="/reservations" className="hover:text-sunrice-yellow">Reservations</Link>
           <Link to="/cart" className="hover:text-sunrice-yellow">Cart</Link>
           <Link to="/contact" className="hover:text-sunrice-yellow">Contact</Link>
-          <Link to="/login" className="hover:text-sunrice-yellow">Login</Link>
           <Link to="/admin" className="hover:text-sunrice-yellow">Dashboard</Link>
           <Link to="/reports" className="hover:text-sunrice-yellow">Reports</Link>
+          <span className="pl-3 ml-3 border-l border-sunrice-brown dark:border-sunrice-cream">
+            <AuthStatus />
+          </span>
+
         </nav>
 
         {/* Theme Toggle */}
@@ -60,7 +66,8 @@ function Header() {
           <Link to="/reservations" className="hover:text-sunrice-yellow">Reservations</Link>
           <Link to="/cart" className="hover:text-sunrice-yellow">Cart</Link>
           <Link to="/contact" className="hover:text-sunrice-yellow">Contact</Link>
-          <Link to="/login" className="hover:text-sunrice-yellow">Login</Link>
+
+
 
           {/* Admin Group */}
           <div className="pt-4 border-t dark:border-white/20 flex flex-col space-y-2">
@@ -75,6 +82,9 @@ function Header() {
             </Link>
           </div>
 
+          <div className="pt-4 border-t dark:border-white/20">
+  <AuthStatus />
+</div>
 
 
 

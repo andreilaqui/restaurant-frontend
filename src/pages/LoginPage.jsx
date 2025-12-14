@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import api from "../utils/api";
 import PageWrapper from "../components/common/PageWrapper";
 
@@ -13,6 +13,7 @@ function LoginPage() {
       const res = await api.post("/auth/login", { username, password });
       localStorage.setItem("accessToken", res.data.accessToken);
       localStorage.setItem("refreshToken", res.data.refreshToken);
+      localStorage.setItem("username", username);
       window.location.href = "/";
     } catch (err) {
       setError(err.response?.data?.error || "Login failed");
