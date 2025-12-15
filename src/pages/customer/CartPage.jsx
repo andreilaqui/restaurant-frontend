@@ -8,9 +8,6 @@ import { useCart } from "../../context/CartContext";
 // 🧱 Components
 import PageWrapper from "../../components/common/PageWrapper";
 
-// 📄 Mock Data
-import menuItems from "../../data/menuItems";
-
 
 function CartPage() {
   const { cart, setCart } = useCart();                             // array for cart items
@@ -18,32 +15,9 @@ function CartPage() {
   const [orderType, setOrderType] = useState("");             // order type: pickup or delivery
 
 
-  //const [loading, setLoading] = useState(true);                     // flag for loading state
-  //const [checkoutSuccess, setCheckoutSuccess] = useState(null);     // object for checkout success details
-
-  // Load cart on mount
-  // useEffect(() => {
-  //   getCart().then((data) => {
-  //     setCart(data);
-  //     setLoading(false);
-  //   });
-  // }, []);
-
   const handleRemove = async (itemId) => {
-    // const updated = await removeFromCart(itemId);
-    // setCart(updated);
-    setCart(cart.filter(item => item.id !== itemId));
+    setCart(cart.filter(item => item._id !== itemId));
   };
-
-  // const handleCheckout = async () => {
-  //   const order = await checkout();
-  //   setCheckoutSuccess(order);
-  //   setCart([]); // clear cart
-  // };
-
-
-  // Helper map for menu items
-  //const menuMap = Object.fromEntries(menuItems.map(item => [item.id, item]));
 
   const cartTotal = cart.reduce((sum, item) => { return sum + item.price * item.quantity }, 0);
 
@@ -87,7 +61,7 @@ function CartPage() {
           <div className="space-y-4">
             {cart.map((item) => (
               <div
-                key={item.id}
+                key={item._id}
                 className="grid grid-cols-4 items-center border-b pb-2 gap-2"
               >
                 {/* Item name */}
@@ -101,7 +75,7 @@ function CartPage() {
                     onClick={() =>
                       setCart(
                         cart.map((i) =>
-                          i.id === item.id && i.quantity > 1
+                          i._id === item._id && i.quantity > 1
                             ? { ...i, quantity: i.quantity - 1 } //go through each item until it sees id, then decrease quantity by 1
                             : i
                         )
@@ -117,7 +91,7 @@ function CartPage() {
                     onClick={() =>
                       setCart(
                         cart.map((i) =>
-                          i.id === item.id
+                          i._id === item._id
                             ? { ...i, quantity: i.quantity + 1 }  //go through each item until it sees id, then increase quantity by 1
                             : i
                         )
@@ -137,7 +111,7 @@ function CartPage() {
 
                 {/* Remove button */}
                 <button
-                  onClick={() => handleRemove(item.id)}
+                  onClick={() => handleRemove(item._id)}
                   className="text-red-500 hover:underline text-right"
                 >
                   Remove

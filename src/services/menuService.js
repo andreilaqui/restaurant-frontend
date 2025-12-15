@@ -6,7 +6,6 @@ import api from "../utils/api";
 // Get all categories
 export async function getCategories() {
   const res = await api.get("/menucategories");
-  //return res.data.filter(cat => cat.label !== "All");
   return res.data;
 }
 

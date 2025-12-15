@@ -5,13 +5,13 @@ function MenuCard({ item }) {
   const { cart, setCart } = useCart();
 
   const addToCart = () => {
-    const isExisting = cart.find((cartItem) => cartItem.id === item.id);
+    const isExisting = cart.find((cartItem) => cartItem._id === item._id);
 
     if (isExisting) {
       setCart(
         cart.map((cartItem) =>
           //look through cart, when you find the item, increase quantity by 1
-          cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
+          cartItem._id === item._id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
         )
       );
       return;
