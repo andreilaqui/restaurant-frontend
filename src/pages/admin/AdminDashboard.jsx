@@ -1,18 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PageWrapper from "../../components/common/PageWrapper";
 import AdminSectionHeader from "../../components/admin/AdminSectionHeader";
 import AdminMenuList from "../../components/admin/AdminMenuList";
+import api from "../../utils/api";
+import { slugify } from "../../utils/slugify";
 
 
 // Mock data
-import menuItems from "../../data/menuItems";
 import reservations from "../../data/reservations";
 import orders from "../../data/orders";
 
 function AdminDashboard() {
+  const [items, setItems] = useState([]);
   const [editingItem, setEditingItem] = useState(null);
   const [viewMode, setViewMode] = useState("compact");
 
+  // Fetch menu items once at dashboard level
+  useEffect(() => {
+    fetchItems();
+  }, []);
+  async function fetchItems() { //this guy is outside so we can call it some place else too
+    try {
+      const res = await api.get("/menuitems");
+      const data = Array.isArray(res.data) ? res.data : res.data.items || [];
+      setItems(data.sort((a, b) => a.name.localeCompare(b.name)));
+    } catch (err) {
+      console.error("Failed to fetch menu items:", err);
+      setItems([]);
+    }
+  }
 
   // Helper: badge styles for order status
   const statusClasses = {
@@ -21,10 +37,90 @@ function AdminDashboard() {
     Cancelled: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
   };
 
+
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const res = await api.get("/menucategories");
+        setCategories(res.data);
+      } catch (err) {
+        console.error("Failed to fetch categories:", err);
+      }
+    }
+    fetchCategories();
+  }, []);
+
+
+  // Delete menu item
+  async function handleDelete(item) {
+    try {
+      //await api.delete(`/menuitems/${item._id}`);
+      await api.delete(`/menuitems/${item._id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+
+      setItems((prev) => prev.filter((i) => i._id !== item._id));
+      alert("Item deleted successfully!");
+    } catch (err) {
+      console.error("Failed to delete item:", err);
+      alert("Could not delete item. Please try again.");
+    }
+  }
+
+  // Save edited item
+  async function handleSave(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+
+    // --- normalize fields ---
+    // auto-generate slug from name
+    const name = formData.get("name");
+    const slug = slugify(name);
+    formData.set("slug", slug);
+
+    // ensure price is a float
+    const price = parseFloat(formData.get("price"));
+    formData.set("price", price);
+
+    // availability checkbox - boolean
+    const availability = formData.get("availability") === "on";
+    formData.set("availability", availability);
+
+    // handle multi-select tags
+    const tags = formData.getAll("tags");
+    formData.delete("tags");
+    tags.forEach((t) => formData.append("tags", t));
+
+    try {
+      const res = await api.patch(`/menuitems/${editingItem._id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      // setItems((prev) =>
+      //   prev.map((i) => (i._id === editingItem._id ? res.data : i))
+      // );
+      await fetchItems();
+      alert("Item updated successfully!");
+
+      setEditingItem(null);
+    } catch (err) {
+      console.error("Failed to update item:", err);
+      alert("Could not save changes. Please try again.");
+    }
+  }
+
+
+
+
+
+
   return (
     <PageWrapper title="Admin Dashboard">
       <div className="space-y-10 dark:text-white/80">
-
         {/* Menu Management */}
         <section className="bg-white/80 dark:bg-white/10 p-6 rounded-xl shadow-md overflow-x-auto">
           <AdminSectionHeader
@@ -35,113 +131,122 @@ function AdminDashboard() {
             }
           />
           <AdminMenuList
+            items={items} // pass items down
             viewMode={viewMode}
             onEdit={(item) => setEditingItem(item)}
-            onDelete={(item) => console.log("Delete", item)}
+            onDelete={handleDelete}
           />
-
         </section>
-
 
         {/* Reservations Viewer */}
-        <section className="bg-white dark:bg-white/10 p-6 rounded-xl shadow-md overflow-x-auto">
-          <h2 className="text-xl font-bold text-sunrice-brown dark:text-sunrice-yellow mb-4">
-            Reservations
-          </h2>
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b dark:border-gray-700">
-                <th className="py-2">Date</th>
-                <th className="py-2">Time</th>
-                <th className="py-2">Guests</th>
-                <th className="py-2">Event</th>
-              </tr>
-            </thead>
-            <tbody>
-              {reservations.slice(0, 3).map(r => (
-                <tr key={r.id} className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-white/5">
-                  <td className="py-2">{r.date}</td>
-                  <td className="py-2">{r.time}</td>
-                  <td className="py-2">{r.partySize}</td>
-                  <td className="py-2">{r.eventType || "-"}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <p className="mt-2 text-sm text-sunrice-brown dark:text-sunrice-yellow">
-            Showing {Math.min(3, reservations.length)} of {reservations.length} reservations
-          </p>
-        </section>
+        {/* expand later}}
 
         {/* Orders Viewer */}
-        <section className="bg-white dark:bg-white/10 p-6 rounded-xl shadow-md overflow-x-auto">
-          <h2 className="text-xl font-bold text-sunrice-brown dark:text-sunrice-yellow mb-4">
-            Orders
-          </h2>
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b dark:border-gray-700">
-                <th className="py-2">Order #</th>
-                <th className="py-2">Items</th>
-                <th className="py-2">Total</th>
-                <th className="py-2">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.slice(0, 3).map(o => (
-                <tr key={o.id} className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-white/5">
-                  <td className="py-2">{o.id}</td>
-                  <td className="py-2">{o.items.length}</td>
-                  <td className="py-2">${o.total}</td>
-                  <td className="py-2">
-                    <span className={`px-2 py-1 rounded text-xs font-semibold ${statusClasses[o.status] || ""}`}>
-                      {o.status}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <p className="mt-2 text-sm text-sunrice-brown dark:text-sunrice-yellow">
-            Showing {Math.min(3, orders.length)} of {orders.length} orders
-          </p>
-        </section>
+        {/* expand later */}
+
       </div>
 
-      {/* Edit Modal (mock) */}
+
+
+      {/* Edit Modal */}
       {editingItem && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
             <h3 className="text-lg font-bold mb-4">Edit Menu Item</h3>
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSave}>
+              {/* Name */}
               <div>
                 <label className="block text-sm font-medium">Name</label>
                 <input
                   type="text"
+                  name="name"
                   defaultValue={editingItem.name}
                   className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
                 />
               </div>
+
+              {/* Price */}
               <div>
                 <label className="block text-sm font-medium">Price</label>
                 <input
                   type="number"
+                  name="price"
+                  step="0.01"
+                  min="0"
                   defaultValue={editingItem.price}
                   className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
                 />
               </div>
+
+              {/* Description */}
               <div>
                 <label className="block text-sm font-medium">Description</label>
                 <textarea
+                  name="description"
                   defaultValue={editingItem.description}
                   rows={3}
                   className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
                 />
               </div>
+
+              {/* Category */}
+              <div>
+                <label className="block text-sm font-medium">Category</label>
+                <select
+                  name="category"
+                  defaultValue={editingItem.category?._id}
+                  className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
+                >
+                  {categories.map((c) => (
+                    <option key={c._id} value={c._id}>
+                      {c.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Image */}
+              <div>
+                <label className="block text-sm font-medium">Image (optional)</label>
+                <input
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
+                />
+              </div>
+
+              {/* Availability */}
               <div>
                 <label className="inline-flex items-center mr-2">Available</label>
-                <input type="checkbox" checked></input>
+                <input
+                  type="checkbox"
+                  name="availability"
+                  defaultChecked={editingItem.availability}
+                />
               </div>
+
+              {/* Tags */}
+              <div>
+                <label className="block text-sm font-medium">Tags</label>
+                <select
+                  name="tags"
+                  multiple
+                  defaultValue={editingItem.tags}
+                  className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
+                >
+                  <option value="vegetarian">Vegetarian</option>
+                  <option value="vegan">Vegan</option>
+                  <option value="spicy">Spicy</option>
+                  <option value="bestseller">Bestseller</option>
+                  <option value="new">New</option>
+                </select>
+                <p className="text-xs text-gray-500">
+                  Hold Ctrl (Windows) or Cmd (Mac) to select multiple
+                </p>
+              </div>
+
+              {/* Buttons */}
               <div className="flex justify-end space-x-2">
                 <button
                   type="button"
@@ -161,8 +266,13 @@ function AdminDashboard() {
           </div>
         </div>
       )}
+
+
+
+
     </PageWrapper>
   );
+
 }
 
 export default AdminDashboard;

@@ -1,40 +1,10 @@
-import { useEffect, useState } from "react";
-import api from "../../utils/api";
-
-function AdminMenuList({ viewMode, onEdit, onDelete }) {
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  // Fetch menu items from backend
-  useEffect(() => {
-    async function fetchItems() {
-      try {
-        const res = await api.get("/menuitems");
-        const data = Array.isArray(res.data) ? res.data : res.data.items || [];
-        setItems(data.sort((a, b) => a.name.localeCompare(b.name)));
-      } catch (err) {
-        console.error("Failed to fetch menu items:", err);
-        setItems([]); // fallback to empty array
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchItems();
-  }, []);
-
+function AdminMenuList({ items = [], viewMode, onEdit, onDelete }) {
+  // Decide how many items to show
   const visibleItems = viewMode === "compact" ? items.slice(0, 5) : items;
-
-  if (loading) {
-    return (
-      <p className="text-sunrice-brown dark:text-sunrice-yellow">
-        Loading menu items…
-      </p>
-    );
-  }
 
   return (
     <div>
-      {/* table layout for desktop */}
+      {/* Table layout for desktop */}
       <div className="overflow-x-auto hidden sm:block">
         <table className="w-full text-left border-collapse text-sm sm:text-base">
           <thead>
@@ -95,7 +65,7 @@ function AdminMenuList({ viewMode, onEdit, onDelete }) {
         </table>
       </div>
 
-      {/* card layout for mobile */}
+      {/* Card layout for mobile */}
       <div className="sm:hidden space-y-4">
         {visibleItems.map((item) => (
           <div
