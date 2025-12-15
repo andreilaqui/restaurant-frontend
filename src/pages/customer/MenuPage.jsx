@@ -17,20 +17,40 @@ import {
 function MenuPage() {
   const [activeCategory, setActiveCategory] = React.useState("all");
   const [query, setQuery] = React.useState("");
+  const [menuCategories, setMenuCategories] = React.useState([]);
+  const [items, setItems] = React.useState([]);
 
-  const menuCategories = getCategories();
 
-  // Base items by category
-  let items = activeCategory === "all"
-    ? getMenuItems()
-    : getMenuItemsByCategory(activeCategory);
+  // Fetch categories once
+  React.useEffect(() => {
+    getCategories().then(setMenuCategories).catch(console.error);
+  }, []);
 
-  // Apply search filter if query is not empty
-  if (query.trim() !== "") {
-    items = searchMenuItems(query).filter(item =>
-      activeCategory === "all" ? true : item.category === activeCategory
-    );
-  }
+  // Fetch items whenever category or query changes
+  React.useEffect(() => {
+    async function fetchItems() {
+      try {
+        let data;
+        if (query.trim() !== "") {
+          data = await searchMenuItems(query);
+          if (activeCategory !== "all") {
+            data = data.filter(item => item.category === activeCategory);
+          }
+        } else {
+          data =
+            activeCategory === "all"
+              ? await getMenuItems()
+              : await getMenuItemsByCategory(activeCategory);
+        }
+        setItems(data);
+      } catch (err) {
+        console.error("Failed to fetch items:", err);
+        setItems([]);
+      }
+    }
+    fetchItems();
+  }, [activeCategory, query]);
+
 
   return (
     <PageWrapper title="Manila Sunrice Menu">
@@ -50,7 +70,7 @@ function MenuPage() {
       <div className="flex gap-3 justify-center mb-8 flex-wrap">
         {menuCategories.map((cat) => (
           <CategoryCircleIcon
-            key={cat.id}
+            key={cat._id}
             category={cat}
             isActive={activeCategory === cat.id}
             onClick={setActiveCategory}
@@ -76,7 +96,7 @@ function MenuPage() {
       {/* Menu Items */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-stretch">
         {items.map((item) => (
-          <MenuCard key={item.id} item={item} />
+          <MenuCard key={item._id} item={item} />
         ))}
       </div>
 

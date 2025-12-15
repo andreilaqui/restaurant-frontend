@@ -4,15 +4,15 @@ import CircleIcon from "../common/CircleIcon";
 function CategoryCircleIcon({ category, isActive, onClick}) {
   return (
     <button
-      onClick={() => onClick(category.id)}
+      onClick={() => onClick(category.code)}
       className={`focus:outline-none transition ${
         isActive ? "scale-105" : "opacity-80 hover:opacity-100"
       }`}
     >
       <CircleIcon
-        id={category.id}
+        id={category.code}
         label={category.label}
-        iconSrc={`/icons/${category.id}.png`}
+        iconSrc={`/icons/${category.code}.png`}
       />
     </button>
   );

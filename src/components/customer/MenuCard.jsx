@@ -36,9 +36,14 @@ function MenuCard({ item }) {
             flex flex-col h-full
           ">
       <img
-        src={item.image}
+        src={item.image.url}
         alt={item.name}
         className="w-full h-48 object-cover rounded-lg mb-3"
+        onError={(e) => {
+          e.currentTarget.src = "public/icons/sunricelogo.png"; // fallback image
+          e.currentTarget.alt = "Image not available";
+        }}
+
       />
       <h3 className="font-semibold text-lg text-sunrice-brown dark:text-sunrice-yellow">{item.name}</h3>
       <p className="text-sm text-sunrice-brown/80 dark:text-sunrice-cream/90">{item.description}</p>
@@ -57,7 +62,7 @@ function MenuCard({ item }) {
       </div>
       <div className="mt-auto flex items-baseline justify-between">
         <p className="font-bold text-sunrice-brown dark:text-sunrice-yellow">
-          ${item.price}
+          ${item.price.toFixed(2)}
         </p>
         {item.availability ? (
           <button
