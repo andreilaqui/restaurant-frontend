@@ -19,7 +19,7 @@ export async function getMenuItems(includeUnavailable = false) {
 // Get items by category id (e.g. "sweets", "rice")
 export async function getMenuItemsByCategory(categoryId, includeUnavailable = false) {
   const items = await getMenuItems(includeUnavailable);
-  return items.filter(item => item.category === categoryId);
+  return items.filter(item => item.category.code === categoryId);
 }
 
 // Get single item by slug (useful for detail pages later)
