@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import PageWrapper from "../../components/common/PageWrapper";
 import AdminSectionHeader from "../../components/admin/AdminSectionHeader";
 import AdminMenuList from "../../components/admin/AdminMenuList";
+import EditMenuModal from "../../components/admin/EditMenuModal";
 import api from "../../utils/api";
 import { slugify } from "../../utils/slugify";
 
@@ -11,11 +12,16 @@ import reservations from "../../data/reservations";
 import orders from "../../data/orders";
 
 function AdminDashboard() {
-  const [items, setItems] = useState([]);
-  const [editingItem, setEditingItem] = useState(null);
-  const [viewMode, setViewMode] = useState("compact");
 
-  // Fetch menu items once at dashboard level
+  // states
+  const [items, setItems] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [viewMode, setViewMode] = useState("compact");
+  const [editingItem, setEditingItem] = useState(null);
+  const [addingItem, setAddingItem] = useState(false);
+
+
+  // fetch menu items once at dashboard level
   useEffect(() => {
     fetchItems();
   }, []);
@@ -30,7 +36,7 @@ function AdminDashboard() {
     }
   }
 
-  // Helper: badge styles for order status
+  // badge styles for order status
   const statusClasses = {
     Completed: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
     Pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
@@ -38,12 +44,13 @@ function AdminDashboard() {
   };
 
 
-  const [categories, setCategories] = useState([]);
+  // fetch categories for edit modal
   useEffect(() => {
     async function fetchCategories() {
       try {
         const res = await api.get("/menucategories");
-        setCategories(res.data);
+        const filtered = res.data.filter(cat => cat.label !== "All");
+        setCategories(filtered);
       } catch (err) {
         console.error("Failed to fetch categories:", err);
       }
@@ -54,6 +61,11 @@ function AdminDashboard() {
 
   // Delete menu item
   async function handleDelete(item) {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete "${item.name}"?`
+    );
+    if (!confirmed) return;
+
     try {
       //await api.delete(`/menuitems/${item._id}`);
       await api.delete(`/menuitems/${item._id}`, {
@@ -100,9 +112,6 @@ function AdminDashboard() {
         },
       });
 
-      // setItems((prev) =>
-      //   prev.map((i) => (i._id === editingItem._id ? res.data : i))
-      // );
       await fetchItems();
       alert("Item updated successfully!");
 
@@ -113,6 +122,51 @@ function AdminDashboard() {
     }
   }
 
+  async function handleAdd(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+
+    const name = formData.get("name")?.trim();
+    const price = parseFloat(formData.get("price"));
+    const category = formData.get("category");
+
+    if (!name || !category || isNaN(price) || price <= 0) {
+      alert("Please fill out Name, Category, and a valid Price.");
+      return;
+    }
+
+    const imageFile = formData.get("image");
+    if (!imageFile || imageFile.size === 0) {
+      alert("Please upload an image for the new menu item.");
+      return;
+    }
+
+
+    const slug = slugify(name);
+    formData.set("slug", slug);
+    formData.set("price", price);
+    formData.set("availability", formData.get("availability") === "on");
+
+    const tags = formData.getAll("tags");
+    formData.delete("tags");
+    tags.forEach((t) => formData.append("tags", t));
+
+    try {
+      await api.post("/menuitems", formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      await fetchItems(); // refresh list
+      alert("New item added successfully!");
+      setAddingItem(false);
+    } catch (err) {
+      console.error("Failed to add item:", err);
+      alert("Could not add item. Please try again.");
+    }
+  }
 
 
 
@@ -123,19 +177,28 @@ function AdminDashboard() {
       <div className="space-y-10 dark:text-white/80">
         {/* Menu Management */}
         <section className="bg-white/80 dark:bg-white/10 p-6 rounded-xl shadow-md overflow-x-auto">
-          <AdminSectionHeader
-            title="Menu Management"
+
+          <AdminSectionHeader title="Menu Management"
             toggleLabel={viewMode === "compact" ? "View All" : "Compact View"}
             onToggle={() =>
-              setViewMode(viewMode === "compact" ? "expanded" : "compact")
-            }
+              setViewMode(viewMode === "compact" ? "expanded" : "compact")}
           />
+
           <AdminMenuList
             items={items} // pass items down
             viewMode={viewMode}
             onEdit={(item) => setEditingItem(item)}
             onDelete={handleDelete}
           />
+
+          <div className="flex justify-end items-center mb-6">
+            <button onClick={() => setAddingItem(true)}
+              className="px-2 py-1 bg-sunrice-brown text-white rounded hover:bg-sunrice-yellow hover:text-sunrice-brown transition"            >
+              + Add Item
+            </button>
+          </div>
+
+
         </section>
 
         {/* Reservations Viewer */}
@@ -149,123 +212,19 @@ function AdminDashboard() {
 
 
       {/* Edit Modal */}
-      {editingItem && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
-            <h3 className="text-lg font-bold mb-4">Edit Menu Item</h3>
-            <form className="space-y-4" onSubmit={handleSave}>
-              {/* Name */}
-              <div>
-                <label className="block text-sm font-medium">Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  defaultValue={editingItem.name}
-                  className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
-                />
-              </div>
-
-              {/* Price */}
-              <div>
-                <label className="block text-sm font-medium">Price</label>
-                <input
-                  type="number"
-                  name="price"
-                  step="0.01"
-                  min="0"
-                  defaultValue={editingItem.price}
-                  className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
-                />
-              </div>
-
-              {/* Description */}
-              <div>
-                <label className="block text-sm font-medium">Description</label>
-                <textarea
-                  name="description"
-                  defaultValue={editingItem.description}
-                  rows={3}
-                  className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
-                />
-              </div>
-
-              {/* Category */}
-              <div>
-                <label className="block text-sm font-medium">Category</label>
-                <select
-                  name="category"
-                  defaultValue={editingItem.category?._id}
-                  className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
-                >
-                  {categories.map((c) => (
-                    <option key={c._id} value={c._id}>
-                      {c.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Image */}
-              <div>
-                <label className="block text-sm font-medium">Image (optional)</label>
-                <input
-                  type="file"
-                  name="image"
-                  accept="image/*"
-                  className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
-                />
-              </div>
-
-              {/* Availability */}
-              <div>
-                <label className="inline-flex items-center mr-2">Available</label>
-                <input
-                  type="checkbox"
-                  name="availability"
-                  defaultChecked={editingItem.availability}
-                />
-              </div>
-
-              {/* Tags */}
-              <div>
-                <label className="block text-sm font-medium">Tags</label>
-                <select
-                  name="tags"
-                  multiple
-                  defaultValue={editingItem.tags}
-                  className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
-                >
-                  <option value="vegetarian">Vegetarian</option>
-                  <option value="vegan">Vegan</option>
-                  <option value="spicy">Spicy</option>
-                  <option value="bestseller">Bestseller</option>
-                  <option value="new">New</option>
-                </select>
-                <p className="text-xs text-gray-500">
-                  Hold Ctrl (Windows) or Cmd (Mac) to select multiple
-                </p>
-              </div>
-
-              {/* Buttons */}
-              <div className="flex justify-end space-x-2">
-                <button
-                  type="button"
-                  onClick={() => setEditingItem(null)}
-                  className="px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded hover:bg-gray-400 dark:hover:bg-gray-500"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-3 py-1 bg-sunrice-brown text-white rounded hover:bg-sunrice-yellow hover:text-sunrice-brown transition"
-                >
-                  Save
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+      {(editingItem || addingItem) && (
+        <EditMenuModal
+          item={editingItem || {}}   // empty object for Add mode
+          categories={categories}
+          onClose={() => {
+            setAddingItem(false);
+            setEditingItem(null);
+          }}
+          onSave={addingItem ? handleAdd : handleSave}
+        />
       )}
+
+
 
 
 
