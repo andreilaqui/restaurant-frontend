@@ -29,7 +29,7 @@ function AuthStatus() {
       ) : (
         <Link
           to="/login"
-          className="px-3 py-1 rounded-full bg-sunrice-accent text-sunrice-brown hover:bg-sunrice-brown hover:text-sunrice-cream transition"
+          className="px-3 py-1 rounded-full bg-sunrice-accent text-sunrice-brown dark:text-sunrice-cream hover:bg-sunrice-brown hover:text-sunrice-cream transition"
         >
           Log in
         </Link>

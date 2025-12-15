@@ -52,7 +52,8 @@ function ReservationPage() {
           {confirmation.eventType && <p>Event: {confirmation.eventType}</p>}
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto">
+        <div className="bg-sunrice-yellow/20 dark:bg-white/10 p-4 rounded-lg shadow-md w-full max-w-lg mx-auto">
+        <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto dark:text-sunrice-cream">
           <div>
             <label className="block font-medium mb-1">Date</label>
             <input
@@ -128,6 +129,7 @@ function ReservationPage() {
             Book Reservation
           </button>
         </form>
+        </div>
       )}
     </PageWrapper>
   );

@@ -24,7 +24,7 @@ function HomePage() {
           <Link to="/menu" className="px-5 py-3 bg-sunrice-brown text-white rounded-xl shadow-md hover:bg-sunrice-yellow hover:text-sunrice-brown transition">
             Explore Menu
           </Link>
-          <Link to="/reservations" className="px-5 py-3 border border-sunrice-brown text-sunrice-brown rounded-xl shadow-md hover:bg-sunrice-brown hover:text-white transition">
+          <Link to="/reservations" className="px-5 py-3 border border-sunrice-brown text-sunrice-brown dark:border-sunrice-yellow dark:text-sunrice-yellow rounded-xl shadow-md hover:bg-sunrice-brown hover:text-white transition">
             Book a Table
           </Link>
         </div>
@@ -81,7 +81,7 @@ function HomePage() {
                 Whether it’s a birthday brunch or a business lunch, Manila Sunrice is your go-to for flavorful gatherings.
               </p>
               <Link to="/reservations" className="text-sunrice-brown dark:text-sunrice-yellow underline hover:text-sunrice-yellow transition">
-                Book a Table →
+                Book an event →
               </Link>
             </div>
           </div>
