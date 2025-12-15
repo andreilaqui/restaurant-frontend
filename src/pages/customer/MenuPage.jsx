@@ -9,9 +9,7 @@ import CategoryCircleIcon from "../../components/customer/CategoryCircleIcon";
 // 🛠 Services
 import {
   getMenuItems,
-  getCategories,
-  getMenuItemsByCategory,
-  searchMenuItems
+  getCategories
 } from '../../services/menuService';
 
 function MenuPage() {
@@ -30,24 +28,25 @@ function MenuPage() {
   React.useEffect(() => {
     async function fetchItems() {
       try {
-        let data;
-        if (query.trim() !== "") {
-          data = await searchMenuItems(query);
-          if (activeCategory !== "all") {
-            data = data.filter(item => item.category === activeCategory);
-          }
-        } else {
-          data =
-            activeCategory === "all"
-              ? await getMenuItems()
-              : await getMenuItemsByCategory(activeCategory);
-        }
-        setItems(data);
+        const allItems = await getMenuItems();
+        const filtered = allItems.filter((item) => {
+          const matchesQuery =
+            query.trim() === "" ||
+            item.name.toLowerCase().includes(query.toLowerCase()) ||
+            item.description.toLowerCase().includes(query.toLowerCase());
+
+          const matchesCategory =
+            activeCategory === "all" || item.category.code === activeCategory;
+
+          return matchesQuery && matchesCategory;
+        });
+        setItems(filtered);
       } catch (err) {
         console.error("Failed to fetch items:", err);
         setItems([]);
       }
     }
+
     fetchItems();
   }, [activeCategory, query]);
 
@@ -72,7 +71,7 @@ function MenuPage() {
           <CategoryCircleIcon
             key={cat._id}
             category={cat}
-            isActive={activeCategory === cat.id}
+            isActive={activeCategory === cat._id}
             onClick={setActiveCategory}
           />
         ))}

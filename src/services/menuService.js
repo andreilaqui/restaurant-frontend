@@ -16,32 +16,35 @@ export async function getMenuItems(includeUnavailable = false) {
   return includeUnavailable ? res.data : res.data.filter(item => item.availability);
 }
 
-// Get items by category id (e.g. "sweets", "rice")
-export async function getMenuItemsByCategory(categoryId, includeUnavailable = false) {
-  const items = await getMenuItems(includeUnavailable);
-  return items.filter(item => item.category.code === categoryId);
-}
+/************/
+/* DEPRECATED WHEN MOVING FROM STATIC ARRAY TO REAL API DATA . WILL DELETE*/
+/************/
+// // Get items by category id (e.g. "sweets", "rice")
+// export async function getMenuItemsByCategory(categoryId, includeUnavailable = false) {
+//   const items = await getMenuItems(includeUnavailable);
+//   return items.filter(item => item.category.code === categoryId);
+// }
 
-// Get single item by slug (useful for detail pages later)
-export async function getMenuItemBySlug(slug, includeUnavailable = false) {
-  const items = await getMenuItems(includeUnavailable);
-  return items.find(item => item.slug === slug);
-}
+// // Get single item by slug (useful for detail pages later)
+// export async function getMenuItemBySlug(slug, includeUnavailable = false) {
+//   const items = await getMenuItems(includeUnavailable);
+//   return items.find(item => item.slug === slug);
+// }
 
-// Get items by tag (e.g. "vegan", "spicy")
-export async function getMenuItemsByTag(tag, includeUnavailable = false) {
-  const items = await getMenuItems(includeUnavailable);
-  return items.filter(item => item.tags?.includes(tag));
-}
+// // Get items by tag (e.g. "vegan", "spicy")
+// export async function getMenuItemsByTag(tag, includeUnavailable = false) {
+//   const items = await getMenuItems(includeUnavailable);
+//   return items.filter(item => item.tags?.includes(tag));
+// }
 
 
-// Get items by keyword in name or description
-export async function searchMenuItems(keyword, includeUnavailable = false) {
-  const items = await getMenuItems(includeUnavailable);
-  const lower = keyword.toLowerCase();
-  return items.filter(
-    item =>
-      item.name.toLowerCase().includes(lower) ||
-      item.description.toLowerCase().includes(lower)
-  );
-}
+// // Get items by keyword in name or description
+// export async function searchMenuItems(keyword, includeUnavailable = false) {
+//   const items = await getMenuItems(includeUnavailable);
+//   const lower = keyword.toLowerCase();
+//   return items.filter(
+//     item =>
+//       item.name.toLowerCase().includes(lower) ||
+//       item.description.toLowerCase().includes(lower)
+//   );
+// }
