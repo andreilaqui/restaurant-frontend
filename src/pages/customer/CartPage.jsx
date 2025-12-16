@@ -4,6 +4,11 @@ import { Link } from "react-router-dom";
 
 // 🛠 Services
 import { useCart } from "../../context/CartContext";
+import { checkoutOrder } from "../../services/orderService";
+
+
+
+
 
 // 🧱 Components
 import PageWrapper from "../../components/common/PageWrapper";
@@ -21,8 +26,20 @@ function CartPage() {
 
   const cartTotal = cart.reduce((sum, item) => { return sum + item.price * item.quantity }, 0);
 
+  const handleCheckout = async () => {
+    try {
+      const savedOrder = await checkoutOrder(cart, orderType);
+      setCart([]); // clear cart after success
+      setCheckedOut(true);
+      alert(`Order #${savedOrder._id} placed for ${orderType}!`);
+    } catch (err) {
+      console.error("Checkout failed:", err);
+      alert("Failed to place order. Please try again.");
+    }
+  };
 
-  //if (loading) return <PageWrapper title="Cart">Loading...</PageWrapper>;
+
+
 
   const successMessage = (orderType) => {
     if (orderType === "pickup") {
@@ -153,11 +170,7 @@ function CartPage() {
 
             {/* Checkout button */}
             <button
-              onClick={() => {
-                setCart([]);
-                setCheckedOut(true);
-                alert(`Order placed for ${orderType}!`);  //send orderType to backend
-              }}   //clears the cart
+              onClick={handleCheckout}
               disabled={!orderType}   // disables if no choice
               className={`mt-4 px-4 py-2 rounded transition
                 ${orderType ? `bg-sunrice-brown text-white  hover:bg-sunrice-yellow hover:text-sunrice-brown`

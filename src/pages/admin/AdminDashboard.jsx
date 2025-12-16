@@ -1,30 +1,37 @@
 import React, { useState, useEffect } from "react";
+
+// 🧱 Components
 import PageWrapper from "../../components/common/PageWrapper";
 import AdminSectionHeader from "../../components/admin/AdminSectionHeader";
 import AdminMenuList from "../../components/admin/AdminMenuList";
 import EditMenuModal from "../../components/admin/EditMenuModal";
+import AdminOrderList from "../../components/admin/AdminOrderList";
+
+// Services
 import api from "../../utils/api";
 import { slugify } from "../../utils/slugify";
-
-
-// Mock data
-import reservations from "../../data/reservations";
-import orders from "../../data/orders";
 
 function AdminDashboard() {
 
   // states
+
+  // menu items
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
   const [viewMode, setViewMode] = useState("compact");
   const [editingItem, setEditingItem] = useState(null);
   const [addingItem, setAddingItem] = useState(false);
 
+  //orders
+  const [orders, setOrders] = useState([]);
+  const [ordersViewMode, setOrdersViewMode] = useState("compact");
+  const [statusFilter, setStatusFilter] = useState(""); // NEW state for filter
 
-  // fetch menu items once at dashboard level
+  // fetch menu items
   useEffect(() => {
     fetchItems();
   }, []);
+
   async function fetchItems() { //this guy is outside so we can call it some place else too
     try {
       const res = await api.get("/menuitems");
@@ -35,14 +42,6 @@ function AdminDashboard() {
       setItems([]);
     }
   }
-
-  // badge styles for order status
-  const statusClasses = {
-    Completed: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
-    Pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
-    Cancelled: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
-  };
-
 
   // fetch categories for edit modal
   useEffect(() => {
@@ -141,7 +140,6 @@ function AdminDashboard() {
       return;
     }
 
-
     const slug = slugify(name);
     formData.set("slug", slug);
     formData.set("price", price);
@@ -169,7 +167,39 @@ function AdminDashboard() {
   }
 
 
+  // ORDERS
+  // fetch orders once
+  useEffect(() => {
+    async function fetchOrders() {
+      try {
+        const res = await api.get("/orders", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        });
+        setOrders(res.data);
+      } catch (err) {
+        console.error("Failed to fetch orders:", err);
+        setOrders([]);
+      }
+    }
+    fetchOrders();
+  }, []);
 
+  // handler for status updates
+  async function handleOrderStatusChange(orderId, newStatus) {
+    try {
+      const res = await api.patch(`/orders/${orderId}`, { status: newStatus }, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
+      setOrders(orders.map(o => o._id === orderId ? res.data : o));
+    } catch (err) {
+      console.error("Failed to update order status:", err);
+    }
+  }
+
+  // filter orders by status
+  const filteredOrders = statusFilter
+    ? orders.filter(o => o.status === statusFilter)
+    : orders;
 
 
   return (
@@ -198,18 +228,44 @@ function AdminDashboard() {
             </button>
           </div>
 
-
         </section>
 
         {/* Reservations Viewer */}
-        {/* expand later}}
+        {/* expand later}} */}
 
         {/* Orders Viewer */}
-        {/* expand later */}
+        <section className="bg-white/80 dark:bg-white/10 p-6 rounded-xl shadow-md overflow-x-auto">
+          <AdminSectionHeader
+            title="Orders"
+            toggleLabel={ordersViewMode === "compact" ? "View All" : "Compact View"}
+            onToggle={() =>
+              setOrdersViewMode(ordersViewMode === "compact" ? "expanded" : "compact")
+            }
+          />
+
+          {/* Status Filter - simplest version */}
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="border rounded px-2 py-1 mb-4"
+          >
+            <option value="">All</option>
+            <option value="pending">Pending</option>
+            <option value="preparing">Preparing</option>
+            <option value="ready">Ready</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+
+          <AdminOrderList
+            orders={filteredOrders}
+            viewMode={ordersViewMode}
+            onStatusChange={handleOrderStatusChange}
+          />
+        </section>
+
 
       </div>
-
-
 
       {/* Edit Modal */}
       {(editingItem || addingItem) && (
@@ -224,14 +280,8 @@ function AdminDashboard() {
         />
       )}
 
-
-
-
-
-
     </PageWrapper>
   );
-
 }
 
 export default AdminDashboard;
