@@ -185,6 +185,7 @@ function AdminDashboard() {
         const sorted = res.data.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
+
         setOrders(sorted);
       } catch (err) {
         console.error("Failed to fetch orders:", err);
@@ -223,7 +224,6 @@ function AdminDashboard() {
         const today = new Date();
         const midnight = new Date(today);
         midnight.setHours(0, 0, 0, 0);
-        console.log("Midnight today is:", midnight);
 
         const filtered = res.data.filter(r => {
           const resDate = new Date(r.datetime);
@@ -233,10 +233,10 @@ function AdminDashboard() {
         });
 
         const sorted = filtered.sort(
-          (a, b) => new Date(b.datetime) - new Date(a.datetime)
+          (a, b) => new Date(a.datetime) - new Date(b.datetime)
         );
         setReservations(sorted);
-        
+
       } catch (err) {
         console.error("Failed to fetch reservations:", err);
         setReservations([]);
