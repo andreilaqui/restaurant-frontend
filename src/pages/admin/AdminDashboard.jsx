@@ -182,7 +182,10 @@ function AdminDashboard() {
         const res = await api.get("/orders", {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
         });
-        setOrders(res.data);
+        const sorted = res.data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setOrders(sorted);
       } catch (err) {
         console.error("Failed to fetch orders:", err);
         setOrders([]);
@@ -229,7 +232,11 @@ function AdminDashboard() {
           return !(isPast || isTerminal);
         });
 
-        setReservations(filtered);
+        const sorted = filtered.sort(
+          (a, b) => new Date(b.datetime) - new Date(a.datetime)
+        );
+        setReservations(sorted);
+        
       } catch (err) {
         console.error("Failed to fetch reservations:", err);
         setReservations([]);
