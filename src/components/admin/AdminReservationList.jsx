@@ -41,7 +41,7 @@ function AdminReservationList({ reservations, viewMode, onStatusChange }) {
                 <select
                   value={res.status}
                   onChange={(e) => onStatusChange(res._id, e.target.value)}
-                  className="border rounded px-2 py-1 text-sm"
+                  className="border rounded px-2 py-1 text-sm dark:text-gray-800 dark:bg-gray-300"
                 >
                   {["pending", "confirmed", "cancelled", "completed", "no_show"].map(s => (
                     <option key={s} value={s}>{s}</option>

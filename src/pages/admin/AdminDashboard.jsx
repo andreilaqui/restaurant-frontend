@@ -211,28 +211,32 @@ function AdminDashboard() {
 
 
   useEffect(() => {
-  async function fetchReservations() {
-    try {
-      const res = await api.get("/reservations", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
+    async function fetchReservations() {
+      try {
+        const res = await api.get("/reservations", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        });
 
-      const today = new Date();
-      const filtered = res.data.filter(r => {
-        const resDate = new Date(r.datetime);
-        const isPast = resDate < today.setHours(0,0,0,0); // before today
-        const isTerminal = ["cancelled", "completed", "no_show"].includes(r.status);
-        return !(isPast && isTerminal);
-      });
+        const today = new Date();
+        const midnight = new Date(today);
+        midnight.setHours(0, 0, 0, 0);
+        console.log("Midnight today is:", midnight);
 
-      setReservations(filtered);
-    } catch (err) {
-      console.error("Failed to fetch reservations:", err);
-      setReservations([]);
+        const filtered = res.data.filter(r => {
+          const resDate = new Date(r.datetime);
+          const isPast = resDate < midnight; // before today
+          const isTerminal = ["cancelled", "completed", "no_show"].includes(r.status);
+          return !(isPast || isTerminal);
+        });
+
+        setReservations(filtered);
+      } catch (err) {
+        console.error("Failed to fetch reservations:", err);
+        setReservations([]);
+      }
     }
-  }
-  fetchReservations();
-}, []);
+    fetchReservations();
+  }, []);
 
 
   // handler for status updates
@@ -309,7 +313,7 @@ function AdminDashboard() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="border rounded px-2 py-1 mb-4"
+            className="border rounded px-2 py-1 mb-4 dark:text-gray-800 dark:bg-gray-300"
           >
             <option value="">All</option>
             <option value="pending">Pending</option>

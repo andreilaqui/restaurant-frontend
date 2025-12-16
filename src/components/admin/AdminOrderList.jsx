@@ -54,7 +54,7 @@ function OrderRow({ order, expanded, onToggle, onStatusChange }) {
         {/* Top row: summary */}
         <div className="flex justify-between items-start gap-4 flex-wrap">
           <div className="space-y-1 break-words max-w-[70%]">
-            <div className="font-semibold text-sunrice-brown dark:text-sunrice-yellow break-all">
+            <div className="text-xs text-sunrice-brown dark:text-sunrice-yellow break-all">
               Order #{order._id}
             </div>
             <div className="text-xs text-gray-500 dark:text-gray-400">
@@ -70,11 +70,11 @@ function OrderRow({ order, expanded, onToggle, onStatusChange }) {
             </div>
           </div>
 
-          <div className="flex flex-col items-end gap-2 min-w-[100px]">
+          <div className="flex flex-col items-end gap-2 min-w-[100px] w-full">
             <select
               value={order.status}
               onChange={(e) => onStatusChange(order._id, e.target.value)}
-              className="border rounded px-2 py-1 text-sm w-full"
+              className="border rounded px-2 py-1 text-sm dark:text-gray-800 dark:bg-gray-300"
             >
               {["pending", "preparing", "ready", "completed", "cancelled"].map(s => (
                 <option key={s} value={s}>{s}</option>
@@ -82,7 +82,7 @@ function OrderRow({ order, expanded, onToggle, onStatusChange }) {
             </select>
             <button
               onClick={onToggle}
-              className="text-sunrice-brown underline text-sm"
+              className="text-sunrice-brown underline text-sm dark:text-sunrice-yellow"
             >
               {expanded ? "Collapse" : "Expand"}
             </button>
