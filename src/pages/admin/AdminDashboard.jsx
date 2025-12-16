@@ -6,6 +6,7 @@ import AdminSectionHeader from "../../components/admin/AdminSectionHeader";
 import AdminMenuList from "../../components/admin/AdminMenuList";
 import EditMenuModal from "../../components/admin/EditMenuModal";
 import AdminOrderList from "../../components/admin/AdminOrderList";
+import AdminReservationList from "../../components/admin/AdminReservationList";
 
 // Services
 import api from "../../utils/api";
@@ -26,6 +27,12 @@ function AdminDashboard() {
   const [orders, setOrders] = useState([]);
   const [ordersViewMode, setOrdersViewMode] = useState("compact");
   const [statusFilter, setStatusFilter] = useState(""); // NEW state for filter
+
+  //resesrvation
+  const [reservations, setReservations] = useState([]);
+  const [reservationsViewMode, setReservationsViewMode] = useState("compact");
+
+
 
   // fetch menu items
   useEffect(() => {
@@ -202,6 +209,46 @@ function AdminDashboard() {
     : orders;
 
 
+
+  useEffect(() => {
+  async function fetchReservations() {
+    try {
+      const res = await api.get("/reservations", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
+
+      const today = new Date();
+      const filtered = res.data.filter(r => {
+        const resDate = new Date(r.datetime);
+        const isPast = resDate < today.setHours(0,0,0,0); // before today
+        const isTerminal = ["cancelled", "completed", "no_show"].includes(r.status);
+        return !(isPast && isTerminal);
+      });
+
+      setReservations(filtered);
+    } catch (err) {
+      console.error("Failed to fetch reservations:", err);
+      setReservations([]);
+    }
+  }
+  fetchReservations();
+}, []);
+
+
+  // handler for status updates
+  async function handleReservationStatusChange(resId, newStatus) {
+    try {
+      const res = await api.patch(`/reservations/${resId}`, { status: newStatus }, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
+      setReservations(reservations.map(r => r._id === resId ? res.data : r));
+    } catch (err) {
+      console.error("Failed to update reservation status:", err);
+    }
+  }
+
+
+
   return (
     <PageWrapper title="Admin Dashboard">
       <div className="space-y-10 dark:text-white/80">
@@ -231,7 +278,22 @@ function AdminDashboard() {
         </section>
 
         {/* Reservations Viewer */}
-        {/* expand later}} */}
+        <section className="bg-white/80 dark:bg-white/10 p-6 rounded-xl shadow-md overflow-x-auto">
+          <AdminSectionHeader
+            title="Reservations"
+            toggleLabel={reservationsViewMode === "compact" ? "View All" : "Compact View"}
+            onToggle={() =>
+              setReservationsViewMode(reservationsViewMode === "compact" ? "expanded" : "compact")
+            }
+          />
+
+          <AdminReservationList
+            reservations={reservations}
+            viewMode={reservationsViewMode}
+            onStatusChange={handleReservationStatusChange}
+          />
+        </section>
+
 
         {/* Orders Viewer */}
         <section className="bg-white/80 dark:bg-white/10 p-6 rounded-xl shadow-md overflow-x-auto">
@@ -243,7 +305,7 @@ function AdminDashboard() {
             }
           />
 
-          {/* Status Filter - simplest version */}
+          {/* Status Filter */}
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}

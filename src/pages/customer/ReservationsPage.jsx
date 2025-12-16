@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 
 // 🛠 Services
-import { createReservation, getReservations } from "../../services/reservationService";
+import { createReservation } from "../../services/reservationService";
 
 // 🧱 Components
 import PageWrapper from "../../components/common/PageWrapper";
@@ -13,7 +13,7 @@ function ReservationPage() {
     time: "",
     partySize: 2,
     notes: "",
-    eventType: "",
+    eventType: "none", // backend expects lowercase enums
   });
 
   const [confirmation, setConfirmation] = useState(null);
@@ -28,19 +28,23 @@ function ReservationPage() {
     e.preventDefault();
     setError("");
 
-    // Optional: block double-bookings
-    const existing = await getReservations();
-    const conflict = existing.find(
-      (r) => r.date === form.date && r.time === form.time
-    );
+    try {
+      // Combine date + time into a single ISO datetime
+      const datetime = new Date(`${form.date}T${form.time}`);
 
-    if (conflict) {
-      setError("Sorry, that time slot is already booked.");
-      return;
+      const payload = {
+        datetime,
+        partySize: form.partySize,
+        notes: form.notes,
+        eventType: form.eventType.toLowerCase() || "none",
+      };
+
+      const newRes = await createReservation(payload);
+      setConfirmation(newRes);
+    } catch (err) {
+      console.error("Failed to create reservation:", err);
+      setError("Could not create reservation. Please try again.");
     }
-
-    const newRes = await createReservation(form);
-    setConfirmation(newRes);
   };
 
   return (
@@ -48,87 +52,100 @@ function ReservationPage() {
       {confirmation ? (
         <div className="p-6 bg-green-100 dark:bg-green-900 rounded-lg">
           <h2 className="text-xl font-bold mb-2">Reservation Confirmed!</h2>
-          <p>Reservation #{confirmation.id} for {confirmation.partySize} guests on {confirmation.date} at {confirmation.time}.</p>
-          {confirmation.eventType && <p>Event: {confirmation.eventType}</p>}
+          <p>
+            Reservation #{confirmation._id} for {confirmation.partySize} guests on{" "}
+            {new Date(confirmation.datetime).toLocaleDateString()} at{" "}
+            {new Date(confirmation.datetime).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+            .
+          </p>
+          {confirmation.eventType !== "none" && (
+            <p>Event: {confirmation.eventType}</p>
+          )}
         </div>
       ) : (
         <div className="bg-sunrice-yellow/20 dark:bg-white/10 p-4 rounded-lg shadow-md w-full max-w-lg mx-auto">
-        <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto dark:text-sunrice-cream">
-          <div>
-            <label className="block font-medium mb-1">Date</label>
-            <input
-              type="date"
-              name="date"
-              value={form.date}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
-            />
-          </div>
-
-          <div>
-            <label className="block font-medium mb-1">Time</label>
-            <input
-              type="time"
-              name="time"
-              value={form.time}
-              onChange={handleChange}
-              required
-              min="11:00"
-              max="21:00"
-              className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
-            />
-          </div>
-
-          <div>
-            <label className="block font-medium mb-1">Party Size</label>
-            <input
-              type="number"
-              name="partySize"
-              value={form.partySize}
-              onChange={handleChange}
-              required
-              min={1}
-              max={20}
-              className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
-            />
-          </div>
-
-          <div>
-            <label className="block font-medium mb-1">Event Type</label>
-            <select
-              name="eventType"
-              value={form.eventType}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
-            >
-              <option value="">None</option>
-              <option value="Birthday">Birthday</option>
-              <option value="Anniversary">Anniversary</option>
-              <option value="Business">Business</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block font-medium mb-1">Notes</label>
-            <textarea
-              name="notes"
-              value={form.notes}
-              onChange={handleChange}
-              rows={3}
-              className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
-            />
-          </div>
-
-          {error && <p className="text-red-500">{error}</p>}
-
-          <button
-            type="submit"
-            className="px-4 py-2 bg-sunrice-brown text-white rounded hover:bg-sunrice-yellow hover:text-sunrice-brown transition"
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-4 max-w-md mx-auto dark:text-sunrice-cream"
           >
-            Book Reservation
-          </button>
-        </form>
+            <div>
+              <label className="block font-medium mb-1">Date</label>
+              <input
+                type="date"
+                name="date"
+                value={form.date}
+                onChange={handleChange}
+                required
+                className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
+              />
+            </div>
+
+            <div>
+              <label className="block font-medium mb-1">Time</label>
+              <input
+                type="time"
+                name="time"
+                value={form.time}
+                onChange={handleChange}
+                required
+                min="11:00"
+                max="21:00"
+                className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
+              />
+            </div>
+
+            <div>
+              <label className="block font-medium mb-1">Party Size</label>
+              <input
+                type="number"
+                name="partySize"
+                value={form.partySize}
+                onChange={handleChange}
+                required
+                min={1}
+                max={20}
+                className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
+              />
+            </div>
+
+            <div>
+              <label className="block font-medium mb-1">Event Type</label>
+              <select
+                name="eventType"
+                value={form.eventType}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
+              >
+                <option value="none">None</option>
+                <option value="birthday">Birthday</option>
+                <option value="anniversary">Anniversary</option>
+                <option value="business">Business</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block font-medium mb-1">Notes</label>
+              <textarea
+                name="notes"
+                value={form.notes}
+                onChange={handleChange}
+                rows={3}
+                className="w-full px-3 py-2 border rounded dark:bg-white/10 dark:text-white"
+              />
+            </div>
+
+            {error && <p className="text-red-500">{error}</p>}
+
+            <button
+              type="submit"
+              className="px-4 py-2 bg-sunrice-brown text-white rounded hover:bg-sunrice-yellow hover:text-sunrice-brown transition"
+            >
+              Book Reservation
+            </button>
+          </form>
         </div>
       )}
     </PageWrapper>
